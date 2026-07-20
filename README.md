@@ -1,27 +1,16 @@
-# ToolHub ID V2 – Cloudflare Pages
+# ToolHub ID V4
+
+Static Cloudflare Pages app with:
+- Dashboard
+- AI Script Generator
+- Thumbnail Generator
+- Voice Generator
+- Title & SEO
+- Checklist
 
 ## Deploy
-1. Upload `index.html` and the `functions/` folder to Cloudflare Pages.
-2. Set environment variable:
-   - `OPENAI_API_KEY`
-3. Optional:
-   - `OPENAI_TTS_MODEL`
-   - `OPENAI_IMAGE_MODEL`
+Upload the contents of this folder to GitHub, then let Cloudflare Pages redeploy automatically.
 
-## API routes
-- `POST /api/research`
-- `POST /api/voiceover`
-- `POST /api/thumbnail`
-
-## What changed
-- Script generator now pulls internet-backed facts from DuckDuckGo + Wikipedia.
-- Thumbnail generator now exports real PNG previews directly in the browser.
-- Voiceover generator now downloads MP3 when the Cloudflare function is configured.
-
-
-## Direct pages
-- `/index.html#dashboard`
-- `/index.html#script`
-- `/index.html#thumbnail`
-- `/index.html#voiceover`
-- `/index.html#seo`
+## Optional APIs
+Set `OPENAI_API_KEY` in Cloudflare if you want the `/api/voiceover` endpoint to return MP3.
+The `/api/research` endpoint fetches public sources for script research.

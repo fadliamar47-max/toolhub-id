@@ -1,48 +1,60 @@
 export async function onRequestPost({ request, env }) {
-  try {
-    const payload = await request.json();
-    const text = String(payload?.text || '').trim();
-    if (!text) return Response.json({ error: 'Text kosong' }, { status: 400 });
+  const headers = {
+    "access-control-allow-origin": "*",
+    "access-control-allow-methods": "POST, OPTIONS",
+    "access-control-allow-headers": "content-type"
+  };
 
-    const apiKey = env.OPENAI_API_KEY;
-    if (!apiKey) {
-      return Response.json({ error: 'OPENAI_API_KEY belum diset di Cloudflare Pages' }, { status: 500 });
-    }
-
-    const model = env.OPENAI_TTS_MODEL || 'gpt-4o-mini-tts';
-    const voice = payload?.voice || 'alloy';
-    const speed = Number(payload?.speedValue || 1.0);
-
-    const ttsRes = await fetch('https://api.openai.com/v1/audio/speech', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model,
-        voice,
-        input: text,
-        format: 'mp3',
-        speed
-      })
-    });
-
-    if (!ttsRes.ok) {
-      const errText = await ttsRes.text();
-      return new Response(errText, { status: ttsRes.status, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
-    }
-
-    const audioBytes = await ttsRes.arrayBuffer();
-    return new Response(audioBytes, {
-      status: 200,
-      headers: {
-        'Content-Type': 'audio/mpeg',
-        'Content-Disposition': 'attachment; filename="voiceover.mp3"',
-        'Cache-Control': 'no-store'
-      }
-    });
-  } catch (err) {
-    return Response.json({ error: err?.message || 'Voiceover generation failed' }, { status: 500 });
+  if (request.method === "OPTIONS") {
+    return new Response(null, { status: 204, headers });
   }
+
+  let body = {};
+  try {
+    body = await request.json();
+  } catch {}
+
+  const text = String(body.text || "").trim();
+  if (!text) return new Response(JSON.stringify({ error: "Text kosong" }), { status: 400, headers: { ...headers, "content-type": "application/json" } });
+
+  const apiKey = env.OPENAI_API_KEY;
+  if (!apiKey) {
+    return new Response(JSON.stringify({
+      error: "OPENAI_API_KEY belum di-set. Endpoint voiceover siap dipakai setelah key diisi di Cloudflare.",
+      ready: false
+    }), {
+      status: 501,
+      headers: { ...headers, "content-type": "application/json" }
+    });
+  }
+
+  const payload = {
+    model: "gpt-4o-mini-tts",
+    voice: "alloy",
+    input: text.slice(0, 4000),
+    format: "mp3"
+  };
+
+  const resp = await fetch("https://api.openai.com/v1/audio/speech", {
+    method: "POST",
+    headers: {
+      "authorization": `Bearer ${apiKey}`,
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!resp.ok) {
+    const textErr = await resp.text();
+    return new Response(JSON.stringify({ error: textErr }), { status: resp.status, headers: { ...headers, "content-type": "application/json" } });
+  }
+
+  return new Response(resp.body, {
+    status: 200,
+    headers: {
+      ...headers,
+      "content-type": "audio/mpeg",
+      "cache-control": "no-store"
+    }
+  });
 }
