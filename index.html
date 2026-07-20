@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>YouTube Content Creation Suite Pro</title>
+  <title>ToolHub ID | AI Content Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -100,7 +100,7 @@
         </div>
         <div>
           <div class="font-extrabold text-lg leading-none">Creator<span class="text-red-500">Suite</span></div>
-          <div class="text-xs text-gray-500 dark:text-gray-400">YouTube Content OS</div>
+          <div class="text-xs text-gray-500 dark:text-gray-400">AI Content Studio</div>
         </div>
       </div>
 
@@ -1672,7 +1672,7 @@ ${sourceBlock || '- Sumber belum tersedia'}`;
 
       ctx.fillStyle = '#ffffffee';
       ctx.font = '800 24px Inter, Arial, sans-serif';
-      ctx.fillText('CreatorSuite', 60, 660);
+      ctx.fillText('ToolHub ID', 60, 660);
 
       return canvas.toDataURL('image/png');
     }
@@ -1686,6 +1686,7 @@ ${sourceBlock || '- Sumber belum tersedia'}`;
           document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
           $('section-' + btn.dataset.target).classList.add('active');
           $('main-scroll').scrollTop = 0;
+          if (location.hash !== '#' + btn.dataset.target) history.replaceState(null, '', '#' + btn.dataset.target);
         });
       });
 
@@ -1958,6 +1959,35 @@ ${sourceBlock || '- Sumber belum tersedia'}`;
       if (window.lucide?.createIcons) window.lucide.createIcons();
     });
   })();
+</script>
+
+
+<script>
+(() => {
+  const routeMap = {
+    'dashboard': 'dashboard',
+    'category': 'category',
+    'ideation': 'ideation',
+    'script': 'script',
+    'voiceover': 'voiceover',
+    'thumbnail': 'thumbnail',
+    'seo': 'seo',
+    'checklist': 'checklist'
+  };
+
+  function openRouteFromHash() {
+    const key = (location.hash || '').replace('#', '').trim();
+    const target = routeMap[key];
+    if (!target) return;
+    const navBtn = document.querySelector(`.nav-item[data-target="${target}"]`);
+    if (navBtn) navBtn.click();
+  }
+
+  window.addEventListener('hashchange', openRouteFromHash);
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(openRouteFromHash, 50);
+  });
+})();
 </script>
 
 </body>

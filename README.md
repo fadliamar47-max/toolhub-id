@@ -1,4 +1,4 @@
-# CreatorSuite Pro – Cloudflare Pages
+# ToolHub ID V2 – Cloudflare Pages
 
 ## Deploy
 1. Upload `index.html` and the `functions/` folder to Cloudflare Pages.
@@ -17,3 +17,11 @@
 - Script generator now pulls internet-backed facts from DuckDuckGo + Wikipedia.
 - Thumbnail generator now exports real PNG previews directly in the browser.
 - Voiceover generator now downloads MP3 when the Cloudflare function is configured.
+
+
+## Direct pages
+- `/index.html#dashboard`
+- `/index.html#script`
+- `/index.html#thumbnail`
+- `/index.html#voiceover`
+- `/index.html#seo`
