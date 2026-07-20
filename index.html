@@ -6,86 +6,114 @@
   <title>ToolHub ID V2.0 - YouTube Content OS</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #020617; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-[#030712] text-slate-100 font-sans antialiased min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
   <div class="flex h-screen overflow-hidden">
-    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between hidden md:flex">
+    <aside class="w-64 bg-[#0b0f19] border-r border-slate-800/80 flex flex-col justify-between hidden md:flex">
       <div class="p-5">
         <div class="flex items-center space-x-3 mb-8">
-          <div class="bg-indigo-600 p-2 rounded-lg text-white font-bold"><i class="fa-solid fa-bolt"></i></div>
+          <div class="bg-indigo-600 p-2.5 rounded-xl text-white font-bold shadow-lg shadow-indigo-600/30 flex items-center justify-center">
+            <i class="fa-solid fa-bolt text-base"></i>
+          </div>
           <div>
-            <div class="font-bold text-lg leading-tight">Creator<span class="text-indigo-400">Suite</span></div>
-            <div class="text-xs text-slate-400">YouTube Content OS</div>
+            <div class="font-bold text-base tracking-wide text-white">ToolHub<span class="text-indigo-400">ID</span></div>
+            <div class="text-[11px] font-medium text-slate-400">YouTube Content OS</div>
           </div>
         </div>
-        <nav class="space-y-1">
-          <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 px-3">Preparation</div>
-          <button onclick="switchTab('dashboard')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn bg-indigo-600 text-white" data-target="dashboard">
-            <i class="fa-solid fa-house w-5"></i> <span>Dashboard</span>
+        <nav class="space-y-1.5">
+          <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2 px-3">Main Navigation</div>
+          <button onclick="switchTab('dashboard')" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition nav-btn bg-indigo-600 text-white shadow-md shadow-indigo-600/20" data-target="dashboard">
+            <i class="fa-solid fa-house w-5 text-indigo-200"></i> <span>Dashboard</span>
           </button>
-          <button onclick="switchTab('category')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800 hover:text-white" data-target="category">
+          <button onclick="switchTab('category')" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800/50 hover:text-slate-200" data-target="category">
             <i class="fa-solid fa-layer-group w-5"></i> <span>Kategori Konten</span>
           </button>
-          <button onclick="switchTab('ideation')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800 hover:text-white" data-target="ideation">
+          <button onclick="switchTab('ideation')" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800/50 hover:text-slate-200" data-target="ideation">
             <i class="fa-solid fa-lightbulb w-5"></i> <span>Content Ideation</span>
           </button>
-          <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-6 mb-2 px-3">Production</div>
-          <button onclick="switchTab('script')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800 hover:text-white" data-target="script">
-            <i class="fa-solid fa-file-pen w-5"></i> <span>Script Generator</span>
+          <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-6 mb-2 px-3">Production Suite</div>
+          <button onclick="switchTab('script')" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800/50 hover:text-slate-200" data-target="script">
+            <i class="fa-solid fa-file-pen w-5"></i> <span>AI Script Generator</span>
           </button>
-          <button onclick="switchTab('voiceover')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800 hover:text-white" data-target="voiceover">
-            <i class="fa-solid fa-microphone w-5"></i> <span>Voiceover</span>
+          <button onclick="switchTab('voiceover')" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800/50 hover:text-slate-200" data-target="voiceover">
+            <i class="fa-solid fa-microphone w-5"></i> <span>Voiceover Engine</span>
           </button>
-          <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-6 mb-2 px-3">Packaging</div>
-          <button onclick="switchTab('thumbnail')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800 hover:text-white" data-target="thumbnail">
+          <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-6 mb-2 px-3">Packaging & SEO</div>
+          <button onclick="switchTab('thumbnail')" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800/50 hover:text-slate-200" data-target="thumbnail">
             <i class="fa-solid fa-image w-5"></i> <span>Thumbnail Ideas</span>
           </button>
-          <button onclick="switchTab('seo')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800 hover:text-white" data-target="seo">
+          <button onclick="switchTab('seo')" class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800/50 hover:text-slate-200" data-target="seo">
             <i class="fa-solid fa-chart-line w-5"></i> <span>Title & SEO</span>
           </button>
         </nav>
       </div>
-      <div class="p-4 border-t border-slate-800">
-        <button onclick="toggleProjectManager()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 py-2 px-3 rounded-lg text-sm font-medium flex items-center justify-center space-x-2 transition">
-          <i class="fa-solid fa-folder-open"></i> <span>Project Manager</span>
+      <div class="p-4 border-t border-slate-800/80">
+        <button onclick="toggleProjectManager()" class="w-full bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 py-2.5 px-3 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition shadow-sm">
+          <i class="fa-solid fa-folder-open text-indigo-400"></i> <span>Project Manager</span>
         </button>
       </div>
     </aside>
-    <main class="flex-1 flex flex-col h-screen overflow-y-auto">
-      <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-[#030712]">
+      <header class="bg-[#0b0f19]/80 backdrop-blur-md border-b border-slate-800/80 px-6 py-4 flex items-center justify-between sticky top-0 z-20">
         <div class="flex items-center space-x-4">
-          <h1 id="page-title" class="text-xl font-bold text-white">Dashboard Utama</h1>
+          <h1 id="page-title" class="text-lg font-bold text-white tracking-wide">Dashboard Utama</h1>
         </div>
         <div class="flex items-center space-x-3">
-          <span class="bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1 rounded-full border border-emerald-500/20 font-medium">
-            <i class="fa-solid fa-circle text-[8px] mr-1.5 animate-pulse"></i> AI Ready & Active
+          <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs px-3 py-1 rounded-full font-medium flex items-center shadow-sm">
+            <i class="fa-solid fa-circle text-[7px] mr-2 animate-pulse text-emerald-400"></i> AI System Ready
           </span>
         </div>
       </header>
-      <div class="p-6 max-w-6xl mx-auto w-full flex-1">
+      <div class="p-6 md:p-8 max-w-6xl mx-auto w-full flex-1 space-y-6">
         <div id="tab-dashboard" class="space-y-6 tab-content">
-          <div class="bg-gradient-to-r from-indigo-900/40 to-slate-900 border border-indigo-500/20 p-6 rounded-2xl">
-            <div class="text-indigo-400 text-sm font-semibold mb-1"><i class="fa-solid fa-sparkles mr-1"></i> ToolHub ID V2.0</div>
-            <h2 class="text-3xl font-extrabold text-white mb-3">Satu tempat untuk bikin <span class="text-indigo-400">script</span>, <span class="text-indigo-400">thumbnail</span>, dan <span class="text-indigo-400">voice</span>.</h2>
-            <p class="text-slate-400 max-w-2xl mb-6">Dashboard ini jadi pusat kontrol semua tools. Pilih kategori, buat ide, generate script, hingga export hasilnya tanpa pindah-pindah aplikasi.</p>
-            <button onclick="switchTab('category')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/30">
-              Mulai Project Baru <i class="fa-solid fa-arrow-right ml-2"></i>
+          <div class="bg-gradient-to-br from-indigo-950/70 via-slate-900 to-[#0b0f19] border border-indigo-500/25 p-7 rounded-2xl shadow-xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="inline-flex items-center space-x-1.5 text-indigo-300 text-xs font-bold uppercase tracking-wider mb-2 px-2.5 py-1 rounded-md bg-indigo-500/10 border border-indigo-500/20">
+              <i class="fa-solid fa-sparkles"></i> <span>ToolHub ID V2.0</span>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-3">
+              Create YouTube Content <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">Faster, in One Place.</span>
+            </h2>
+            <p class="text-slate-300 max-w-2xl mb-6 text-sm md:text-base leading-relaxed">
+              Dashboard ini jadi pusat kontrol semua tools kreator. Pilih kategori, buat riset ide, generate script, hingga optimasi SEO tanpa harus pindah-pindah aplikasi.
+            </p>
+            <button onclick="switchTab('category')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-6 py-3 rounded-xl transition shadow-lg shadow-indigo-600/30 text-sm flex items-center space-x-2">
+              <span>Mulai Buat Konten</span> <i class="fa-solid fa-arrow-right"></i>
             </button>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-              <h3 class="font-bold text-lg mb-2 text-white"><i class="fa-solid fa-compass text-indigo-400 mr-2"></i> Panduan Cepat</h3>
-              <ul class="text-sm text-slate-400 space-y-2">
-                <li>• Pilih kategori konten terlebih dahulu di menu sebelah kiri.</li>
-                <li>• Masukkan topik dan generate ide konten terbaikmu.</li>
-                <li>• Gunakan Script & Voiceover Generator untuk menyelesaikan produksi.</li>
+            <div class="bg-[#0b0f19] border border-slate-800/80 p-6 rounded-2xl shadow-sm hover:border-slate-700 transition">
+              <div class="flex items-center space-x-3 mb-3">
+                <div class="w-8 h-8 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold">
+                  <i class="fa-solid fa-compass"></i>
+                </div>
+                <h3 class="font-bold text-white text-base">Panduan Cepat</h3>
+              </div>
+              <ul class="text-sm text-slate-300 space-y-2.5 pl-2">
+                <li class="flex items-start space-x-2"><span class="text-indigo-400 font-bold">•</span> <span>Pilih kategori konten terlebih dahulu pada menu navigasi kiri.</span></li>
+                <li class="flex items-start space-x-2"><span class="text-indigo-400 font-bold">•</span> <span>Masukkan topik kasar untuk di-generate menjadi ide video viral.</span></li>
+                <li class="flex items-start space-x-2"><span class="text-indigo-400 font-bold">•</span> <span>Gunakan AI Script & Voiceover Generator untuk mempercepat produksi.</span></li>
               </ul>
             </div>
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-              <h3 class="font-bold text-lg mb-2 text-white"><i class="fa-solid fa-floppy-disk text-indigo-400 mr-2"></i> Status Sistem</h3>
-              <p class="text-sm text-slate-400 mb-3">Penyimpanan otomatis aktif menggunakan LocalStorage browser Anda.</p>
-              <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs font-mono text-emerald-400">
-                Status: Siap digunakan (Tanpa Error)
+            <div class="bg-[#0b0f19] border border-slate-800/80 p-6 rounded-2xl shadow-sm hover:border-slate-700 transition flex flex-col justify-between">
+              <div>
+                <div class="flex items-center space-x-3 mb-3">
+                  <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold">
+                    <i class="fa-solid fa-database"></i>
+                  </div>
+                  <h3 class="font-bold text-white text-base">Status Sistem & Data</h3>
+                </div>
+                <p class="text-sm text-slate-300 mb-4">Penyimpanan otomatis aman aktif menggunakan LocalStorage browser perangkat Anda.</p>
+              </div>
+              <div class="bg-[#030712] p-3.5 rounded-xl border border-slate-800 text-xs font-mono text-emerald-400 flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>System Operational: Normal & Active</span>
               </div>
             </div>
           </div>
@@ -93,146 +121,156 @@
         <div id="tab-category" class="space-y-6 tab-content hidden">
           <div>
             <h2 class="text-2xl font-bold text-white mb-1">Pilih Kategori Konten</h2>
-            <p class="text-slate-400 text-sm">Pilih niche atau kategori untuk membuat ide dan script jadi lebih relevan.</p>
+            <p class="text-slate-400 text-sm">Pilih niche atau kategori spesifik agar hasil generate script dan ide jauh lebih relevan.</p>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div onclick="selectCategory('Gaming & Esports')" class="category-card cursor-pointer bg-slate-900 border border-slate-800 hover:border-indigo-500 p-5 rounded-xl transition">
-              <div class="text-indigo-400 text-xl mb-3"><i class="fa-solid fa-gamepad"></i></div>
-              <h3 class="font-bold text-white mb-1">Gaming & Esports</h3>
-              <p class="text-xs text-slate-400">Gameplay, tips trik, review game, dan berita turnamen.</p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            <div onclick="selectCategory('Gaming & Esports')" class="category-card cursor-pointer bg-[#0b0f19] border border-slate-800 hover:border-indigo-500 p-6 rounded-2xl transition group shadow-sm">
+              <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl mb-4 group-hover:scale-110 transition">
+                <i class="fa-solid fa-gamepad"></i>
+              </div>
+              <h3 class="font-bold text-white text-lg mb-1">Gaming & Esports</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">Gameplay breakdown, tips trik, review game, dan berita turnamen.</p>
             </div>
-            <div onclick="selectCategory('Vlog & Storytelling')" class="category-card cursor-pointer bg-slate-900 border border-slate-800 hover:border-indigo-500 p-5 rounded-xl transition">
-              <div class="text-indigo-400 text-xl mb-3"><i class="fa-solid fa-video"></i></div>
-              <h3 class="font-bold text-white mb-1">Vlog & Storytelling</h3>
-              <p class="text-xs text-slate-400">Kisah unik, sejarah, essay pendek, dan daily vlog.</p>
+            <div onclick="selectCategory('Vlog & Storytelling')" class="category-card cursor-pointer bg-[#0b0f19] border border-slate-800 hover:border-indigo-500 p-6 rounded-2xl transition group shadow-sm">
+              <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl mb-4 group-hover:scale-110 transition">
+                <i class="fa-solid fa-video"></i>
+              </div>
+              <h3 class="font-bold text-white text-lg mb-1">Vlog & Storytelling</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">Kisah unik, sejarah, essay pendek sinematik, dan daily vlog.</p>
             </div>
-            <div onclick="selectCategory('Automotive & Racing')" class="category-card cursor-pointer bg-slate-900 border border-slate-800 hover:border-indigo-500 p-5 rounded-xl transition">
-              <div class="text-indigo-400 text-xl mb-3"><i class="fa-solid fa-motorcycle"></i></div>
-              <h3 class="font-bold text-white mb-1">Automotive & Racing</h3>
-              <p class="text-xs text-slate-400">MotoGP, review motor/mobil, modifikasi, dan info teknik.</p>
+            <div onclick="selectCategory('Automotive & Racing')" class="category-card cursor-pointer bg-[#0b0f19] border border-slate-800 hover:border-indigo-500 p-6 rounded-2xl transition group shadow-sm">
+              <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl mb-4 group-hover:scale-110 transition">
+                <i class="fa-solid fa-motorcycle"></i>
+              </div>
+              <h3 class="font-bold text-white text-lg mb-1">Automotive & Racing</h3>
+              <p class="text-xs text-slate-400 leading-relaxed">MotoGP, review kendaraan, modifikasi, dan teknik mesin.</p>
             </div>
           </div>
-          <div id="selected-category-alert" class="hidden bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 p-4 rounded-xl text-sm">
-            Kategori aktif dipilih: <strong id="active-cat-name"></strong>. Silakan lanjut ke menu <strong>Content Ideation</strong>!
+          <div id="selected-category-alert" class="hidden bg-emerald-950/30 border border-emerald-500/30 text-emerald-300 p-4 rounded-xl text-sm flex items-center space-x-3">
+            <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+            <div>Kategori aktif dipilih: <strong id="active-cat-name" class="text-white font-semibold"></strong>. Silakan lanjut ke menu <strong>Content Ideation</strong>!</div>
           </div>
         </div>
         <div id="tab-ideation" class="space-y-6 tab-content hidden">
           <div>
             <h2 class="text-2xl font-bold text-white mb-1">Content Ideation</h2>
-            <p class="text-slate-400 text-sm">Masukkan topik kasar atau kata kunci video Anda.</p>
+            <p class="text-slate-400 text-sm">Masukkan topik mentah atau kata kunci video Anda untuk dikembangkan.</p>
           </div>
-          <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+          <div class="bg-[#0b0f19] border border-slate-800 p-7 rounded-2xl space-y-5 shadow-sm">
             <div>
-              <label class="block text-sm font-medium text-slate-300 mb-2">Topik / Ide Kasar</label>
-              <input type="text" id="topic-input" placeholder="Contoh: Rahasia dibalik kemenangan tim underdog..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500">
+              <label class="block text-sm font-semibold text-slate-200 mb-2">Topik / Ide Kasar Video</label>
+              <input type="text" id="topic-input" placeholder="Contoh: Rahasia dibalik kemenangan dramatis tim underdog..." class="w-full bg-[#030712] border border-slate-800 rounded-xl px-4 py-3.5 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm">
             </div>
-            <button onclick="generateIdeas()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2.5 rounded-lg transition text-sm">
-              <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Buat Ide Konten
+            <button onclick="generateIdeas()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-3 rounded-xl transition text-sm shadow-md shadow-indigo-600/20 flex items-center space-x-2">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Buat Ide Konten AI</span>
             </button>
           </div>
           <div id="ideas-result" class="space-y-3"></div>
         </div>
         <div id="tab-script" class="space-y-6 tab-content hidden">
           <div>
-            <h2 class="text-2xl font-bold text-white mb-1">Script Generator</h2>
-            <p class="text-slate-400 text-sm">Atur durasi dan gaya bahasa untuk naskah video Anda.</p>
+            <h2 class="text-2xl font-bold text-white mb-1">AI Script Generator</h2>
+            <p class="text-slate-400 text-sm">Atur durasi dan gaya bahasa untuk naskah profesional video Anda.</p>
           </div>
-          <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-[#0b0f19] border border-slate-800 p-7 rounded-2xl space-y-5 shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label class="block text-sm font-medium text-slate-300 mb-2">Gaya Bahasa</label>
-                <select id="script-style" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500">
-                  <option value="Storytelling">Storytelling Menarik</option>
-                  <option value="Casual">Casual / Santai</option>
-                  <option value="Educational">Edukatif & Fakta</option>
-                  <option value="Dramatic">Dramatis / Menegangkan</option>
+                <label class="block text-sm font-semibold text-slate-200 mb-2">Gaya Bahasa Naskah</label>
+                <select id="script-style" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-indigo-500 text-sm">
+                  <option value="Storytelling">Storytelling Menarik & Emosional</option>
+                  <option value="Casual">Casual / Santai ala Kreator</option>
+                  <option value="Educational">Edukatif & Berbasis Fakta</option>
+                  <option value="Dramatic">Dramatis & Menegangkan</option>
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-medium text-slate-300 mb-2">Target Durasi</label>
-                <select id="script-duration" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500">
-                  <option value="1 Menit (Shorts)">1 Menit (YouTube Shorts)</option>
-                  <option value="5 Menit (Mid-Form)">5 Menit</option>
-                  <option value="10 Menit (Long-Form)">10 Menit</option>
+                <label class="block text-sm font-semibold text-slate-200 mb-2">Target Durasi Video</label>
+                <select id="script-duration" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:border-indigo-500 text-sm">
+                  <option value="1 Menit (Shorts)">1 Menit (YouTube Shorts / TikTok)</option>
+                  <option value="5 Menit (Mid-Form)">5 Menit (Mid-Form)</option>
+                  <option value="10 Menit (Long-Form)">10 Menit (Long-Form)</option>
                 </select>
               </div>
             </div>
-            <button onclick="generateScript()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2.5 rounded-lg transition text-sm">
-              <i class="fa-solid fa-file-lines mr-2"></i> Generate Script Otomatis
+            <button onclick="generateScript()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-3 rounded-xl transition text-sm shadow-md shadow-indigo-600/20 flex items-center space-x-2">
+              <i class="fa-solid fa-file-lines"></i> <span>Generate Script Otomatis</span>
             </button>
           </div>
-          <div id="script-output" class="bg-slate-900 border border-slate-800 p-6 rounded-xl hidden space-y-3">
-            <h3 class="font-bold text-white text-lg"><i class="fa-solid fa-check text-emerald-400 mr-2"></i> Hasil Script Naskah</h3>
-            <textarea id="script-text-area" rows="8" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-4 text-slate-200 text-sm focus:outline-none focus:border-indigo-500"></textarea>
+          <div id="script-output" class="bg-[#0b0f19] border border-slate-800 p-7 rounded-2xl hidden space-y-4 shadow-sm">
+            <h3 class="font-bold text-white text-base flex items-center space-x-2">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs"><i class="fa-solid fa-check"></i></span>
+              <span>Hasil Naskah Script Profesional</span>
+            </h3>
+            <textarea id="script-text-area" rows="10" class="w-full bg-[#030712] border border-slate-800 rounded-xl p-4 text-slate-200 text-sm font-mono leading-relaxed focus:outline-none focus:border-indigo-500"></textarea>
             <div class="flex justify-end">
-              <button onclick="alert('Script berhasil disalin ke clipboard!')" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-4 py-2 rounded-lg font-medium">Salin Teks</button>
+              <button onclick="alert('Script berhasil disalin ke clipboard!')" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-4 py-2.5 rounded-xl font-semibold transition">Salin Teks Naskah</button>
             </div>
           </div>
         </div>
         <div id="tab-voiceover" class="space-y-6 tab-content hidden">
           <div>
-            <h2 class="text-2xl font-bold text-white mb-1">Voiceover Generator</h2>
-            <p class="text-slate-400 text-sm">Panduan dan teks untuk sinkronisasi suara atau TTS.</p>
+            <h2 class="text-2xl font-bold text-white mb-1">Voiceover Engine</h2>
+            <p class="text-slate-400 text-sm">Panduan dan format teks untuk integrasi ElevenLabs atau TTS.</p>
           </div>
-          <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
-            <p class="text-sm text-slate-300">Gunakan teks dari script yang telah di-generate sebelumnya untuk diproses dengan ElevenLabs atau perekaman manual.</p>
-            <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 text-sm text-slate-400" id="vo-preview-box">
-              Belum ada script tersedia. Selesaikan menu Script Generator terlebih dahulu.
+          <div class="bg-[#0b0f19] border border-slate-800 p-7 rounded-2xl space-y-4 shadow-sm">
+            <p class="text-sm text-slate-300">Teks di bawah ini ditarik otomatis dari hasil script yang sudah Anda buat sebelumnya:</p>
+            <div class="bg-[#030712] p-5 rounded-xl border border-slate-800 text-sm text-slate-300 font-mono leading-relaxed" id="vo-preview-box">
+              Belum ada script tersedia. Selesaikan menu AI Script Generator terlebih dahulu.
             </div>
           </div>
         </div>
         <div id="tab-thumbnail" class="space-y-6 tab-content hidden">
           <div>
-            <h2 class="text-2xl font-bold text-white mb-1">Thumbnail Ideas</h2>
-            <p class="text-slate-400 text-sm">Konsep visual untuk mendongkrak Click-Through Rate (CTR).</p>
+            <h2 class="text-2xl font-bold text-white mb-1">Thumbnail Concept Ideas</h2>
+            <p class="text-slate-400 text-sm">Konsep visual tata letak untuk mendongkrak Click-Through Rate (CTR) video.</p>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-              <span class="text-xs bg-indigo-500/10 text-indigo-400 px-2 py-1 rounded font-semibold">Konsep 1: High Contrast</span>
-              <p class="text-sm text-slate-300 mt-3">Gunakan close-up ekspresi wajah terkejut dengan latar belakang warna kontras tinggi (Kuning/Merah).</p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="bg-[#0b0f19] border border-slate-800 p-6 rounded-2xl shadow-sm">
+              <span class="text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-md font-bold">Konsep 1: High Contrast</span>
+              <p class="text-sm text-slate-300 mt-4 leading-relaxed">Gunakan close-up ekspresi wajah emosional dengan background warna kontras tajam (Kuning/Merah terang).</p>
             </div>
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-              <span class="text-xs bg-indigo-500/10 text-indigo-400 px-2 py-1 rounded font-semibold">Konsep 2: Curiosity Gap</span>
-              <p class="text-sm text-slate-300 mt-3">Tampilkan screenshot objek utama dengan panah merah atau lingkaran penanda rahasia.</p>
+            <div class="bg-[#0b0f19] border border-slate-800 p-6 rounded-2xl shadow-sm">
+              <span class="text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-md font-bold">Konsep 2: Curiosity Gap</span>
+              <p class="text-sm text-slate-300 mt-4 leading-relaxed">Tampilkan objek misterius dengan tanda panah atau lingkaran merah tipis untuk memicu rasa penasaran penonton.</p>
             </div>
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-              <span class="text-xs bg-indigo-500/10 text-indigo-400 px-2 py-1 rounded font-semibold">Konsep 3: Minimalist Text</span>
-              <p class="text-sm text-slate-300 mt-3">Teks tebal 3 kata maksimal dengan visual sinematik berkualitas tinggi tanpa banyak gangguan.</p>
+            <div class="bg-[#0b0f19] border border-slate-800 p-6 rounded-2xl shadow-sm">
+              <span class="text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-md font-bold">Konsep 3: Minimalist Text</span>
+              <p class="text-sm text-slate-300 mt-4 leading-relaxed">Maksimal 3 kata teks besar berjenis sans-serif tebal dengan visual latar belakang sinematik gelap.</p>
             </div>
           </div>
         </div>
         <div id="tab-seo" class="space-y-6 tab-content hidden">
           <div>
-            <h2 class="text-2xl font-bold text-white mb-1">Title & SEO</h2>
-            <p class="text-slate-400 text-sm">Judul, tags, dan deskripsi optimal untuk algoritma YouTube.</p>
+            <h2 class="text-2xl font-bold text-white mb-1">Title & YouTube SEO</h2>
+            <p class="text-slate-400 text-sm">Rekomendasi judul, tag, dan deskripsi optimal untuk algoritma YouTube.</p>
           </div>
-          <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+          <div class="bg-[#0b0f19] border border-slate-800 p-7 rounded-2xl space-y-5 shadow-sm">
             <div>
-              <label class="block text-sm font-medium text-slate-300 mb-1">Rekomendasi Judul</label>
-              <input type="text" readonly value="TERUNGKAP! Inilah Alasan Sebenarnya di Balik Peristiwa Ini..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-slate-300 text-sm">
+              <label class="block text-sm font-semibold text-slate-200 mb-2">Rekomendasi Judul Berdaya Tarik Tinggi</label>
+              <input type="text" readonly value="TERUNGKAP! Inilah Alasan Sebenarnya di Balik Peristiwa Ini..." class="w-full bg-[#030712] border border-slate-800 rounded-xl px-4 py-3.5 text-slate-200 text-sm font-medium">
             </div>
             <div>
-              <label class="block text-sm font-medium text-slate-300 mb-1">Tags / Kata Kunci</label>
-              <textarea readonly rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-300 text-sm">youtube tips, content creator indonesia, strategi konten viral, toolhub id</textarea>
+              <label class="block text-sm font-semibold text-slate-200 mb-2">Optimized Tags / Kata Kunci</label>
+              <textarea readonly rows="3" class="w-full bg-[#030712] border border-slate-800 rounded-xl p-4 text-slate-300 text-sm font-mono">youtube tips, content creator indonesia, strategi konten viral, toolhub id, algoritmayoutube</textarea>
             </div>
           </div>
         </div>
       </div>
     </main>
   </div>
-  <div id="project-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 max-w-md w-full p-6 rounded-2xl space-y-4">
+  <div id="project-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#0b0f19] border border-slate-800 max-w-md w-full p-7 rounded-2xl space-y-5 shadow-2xl">
       <div class="flex items-center justify-between">
         <h3 class="font-bold text-lg text-white">Project Manager</h3>
-        <button onclick="toggleProjectManager()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+        <button onclick="toggleProjectManager()" class="text-slate-400 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
-      <p class="text-sm text-slate-400">Data proyek Anda tersimpan secara lokal di browser secara otomatis.</p>
-      <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
-        <div class="text-xs text-slate-400">Kategori Aktif: <span id="pm-cat" class="text-white font-medium">-</span></div>
-        <div class="text-xs text-slate-400">Topik Terakhir: <span id="pm-topic" class="text-white font-medium">-</span></div>
+      <p class="text-sm text-slate-300 leading-relaxed">Seluruh state dan progres proyek Anda tersimpan secara otomatis dan aman secara lokal di browser.</p>
+      <div class="bg-[#030712] p-4 rounded-xl border border-slate-800 space-y-2.5 font-mono text-xs">
+        <div class="text-slate-400">Kategori Aktif: <span id="pm-cat" class="text-indigo-400 font-semibold">-</span></div>
+        <div class="text-slate-400">Topik Terakhir: <span id="pm-topic" class="text-indigo-400 font-semibold">-</span></div>
       </div>
-      <div class="flex justify-end space-x-2 pt-2">
-        <button onclick="toggleProjectManager()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-4 py-2 rounded-lg font-medium">Tutup</button>
+      <div class="flex justify-end pt-2">
+        <button onclick="toggleProjectManager()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-5 py-2.5 rounded-xl font-semibold transition">Tutup Panel</button>
       </div>
     </div>
   </div>
@@ -242,10 +280,10 @@
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
       document.getElementById('tab-' + tabId).classList.remove('hidden');
       document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('bg-indigo-600', 'text-white');
+        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-md', 'shadow-indigo-600/20');
         btn.classList.add('text-slate-400');
         if(btn.getAttribute('data-target') === tabId) {
-          btn.classList.add('bg-indigo-600', 'text-white');
+          btn.classList.add('bg-indigo-600', 'text-white', 'shadow-md', 'shadow-indigo-600/20');
           btn.classList.remove('text-slate-400');
         }
       });
@@ -253,10 +291,10 @@
         'dashboard': 'Dashboard Utama',
         'category': 'Pilih Kategori Konten',
         'ideation': 'Content Ideation',
-        'script': 'Script Generator',
-        'voiceover': 'Voiceover Generator',
-        'thumbnail': 'Thumbnail Ideas',
-        'seo': 'Title & SEO'
+        'script': 'AI Script Generator',
+        'voiceover': 'Voiceover Engine',
+        'thumbnail': 'Thumbnail Concept Ideas',
+        'seo': 'Title & YouTube SEO'
       };
       document.getElementById('page-title').innerText = titles[tabId] || 'ToolHub ID';
     }
@@ -273,13 +311,13 @@
       localStorage.setItem('toolhub_state', JSON.stringify(appState));
       const resultBox = document.getElementById('ideas-result');
       resultBox.innerHTML = `
-        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center justify-between">
+        <div class="bg-[#0b0f19] border border-slate-800 p-5 rounded-2xl flex items-center justify-between shadow-sm">
           <div>
-            <span class="text-xs bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded font-semibold">Ide Terpilih</span>
-            <h4 class="font-bold text-white mt-1">Analisis Mendalam: ${topic}</h4>
-            <p class="text-xs text-slate-400 mt-1">Potensi penonton tinggi berdasarkan kategori ${appState.category || 'Umum'}.</p>
+            <span class="text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-md font-bold">Ide Terpilih</span>
+            <h4 class="font-bold text-white text-base mt-2">Analisis & Riset Mendalam: ${topic}</h4>
+            <p class="text-xs text-slate-400 mt-1">Potensi engagement tinggi berdasarkan niche ${appState.category || 'Umum'}.</p>
           </div>
-          <button onclick="switchTab('script')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-2 rounded-lg font-medium">Gunakan ke Script</button>
+          <button onclick="switchTab('script')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-4 py-2.5 rounded-xl font-semibold transition shadow-sm">Gunakan ke Script</button>
         </div>
       `;
     }
