@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Content Creation Suite Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            yt: {
+              black: '#0f0f0f',
+              dark: '#202020',
+              red: '#ff0000',
+              redHover: '#cc0000',
+              gray: '#aaaaaa',
+              text: '#f1f1f1'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { transition: background-color .25s ease, color .25s ease; }
+    .dark body { background:#0f0f0f; color:#f1f1f1; }
+    body:not(.dark) { background:#f8fafc; color:#111827; }
+
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    .dark ::-webkit-scrollbar-track { background:#0f0f0f; }
+    ::-webkit-scrollbar-track { background:#e5e7eb; }
+    .dark ::-webkit-scrollbar-thumb { background:#3f3f3f; border-radius:999px; }
+    ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:999px; }
+
+    .section-content { display:none; animation: fadeIn .25s ease; }
+    .section-content.active { display:block; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+    .glass {
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0,0,0,.08);
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+    }
+    .dark .glass {
+      background: rgba(32,32,32,.82);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 8px 30px rgba(0,0,0,.25);
+    }
+
+    .nav-item.active {
+      border-left: 4px solid #ff0000;
+      background: rgba(255,0,0,.08);
+      font-weight: 700;
+    }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border-radius: 999px;
+      border: 3px solid rgba(255,255,255,.2);
+      border-top-color: #fff;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .skeleton {
+      background: linear-gradient(90deg, #e5e7eb 25%, #d1d5db 50%, #e5e7eb 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+    .dark .skeleton {
+      background: linear-gradient(90deg, #262626 25%, #3a3a3a 50%, #262626 75%);
+      background-size: 200% 100%;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    textarea, input, select {
+      outline: none;
+    }
+    .chip {
+      display:inline-flex; align-items:center; gap:.35rem;
+      padding:.35rem .6rem; border-radius:999px; font-size:.75rem;
+    }
+  </style>
+</head>
+
+<body class="h-screen overflow-hidden">
+  <div class="flex h-full">
+    <!-- Sidebar -->
+    <aside class="w-72 shrink-0 hidden md:flex flex-col border-r dark:border-[#2a2a2a] border-gray-200 dark:bg-yt-black bg-white">
+      <div class="p-5 flex items-center gap-3 border-b dark:border-[#2a2a2a] border-gray-200">
+        <div class="w-10 h-10 rounded-2xl bg-red-600/15 flex items-center justify-center">
+          <i data-lucide="play-square" class="text-red-500 w-5 h-5"></i>
+        </div>
+        <div>
+          <div class="font-extrabold text-lg leading-none">Creator<span class="text-red-500">Suite</span></div>
+          <div class="text-xs text-gray-500 dark:text-gray-400">YouTube Content OS</div>
+        </div>
+      </div>
+
+      <nav class="p-3 flex-1 overflow-y-auto" id="sidebar-nav">
+        <div class="px-3 mt-2 mb-2 text-[11px] uppercase tracking-[.2em] text-gray-500 dark:text-gray-400">Preparation</div>
+        <button class="nav-item active w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]" data-target="category">
+          <i data-lucide="layout-grid" class="w-4 h-4 text-red-500"></i> Kategori
+        </button>
+        <button class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]" data-target="ideation">
+          <i data-lucide="lightbulb" class="w-4 h-4 text-yellow-500"></i> Ideation
+        </button>
+
+        <div class="px-3 mt-6 mb-2 text-[11px] uppercase tracking-[.2em] text-gray-500 dark:text-gray-400">Production</div>
+        <button class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]" data-target="script">
+          <i data-lucide="file-text" class="w-4 h-4 text-red-500"></i> Script Generator
+        </button>
+        <button class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]" data-target="voiceover">
+          <i data-lucide="mic-vocal" class="w-4 h-4 text-sky-400"></i> Voiceover Generator
+        </button>
+        <button class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]" data-target="thumbnail">
+          <i data-lucide="image" class="w-4 h-4 text-purple-400"></i> Thumbnail Ideas
+        </button>
+
+        <div class="px-3 mt-6 mb-2 text-[11px] uppercase tracking-[.2em] text-gray-500 dark:text-gray-400">Packaging</div>
+        <button class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]" data-target="seo">
+          <i data-lucide="search" class="w-4 h-4 text-green-500"></i> Title & SEO
+        </button>
+        <button class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]" data-target="checklist">
+          <i data-lucide="check-square" class="w-4 h-4 text-emerald-400"></i> Checklist
+        </button>
+      </nav>
+
+      <div class="p-4 border-t dark:border-[#2a2a2a] border-gray-200 space-y-2">
+        <button id="btn-save-modal" class="w-full bg-red-600 hover:bg-red-700 text-white rounded-xl py-2.5 font-semibold flex items-center justify-center gap-2">
+          <i data-lucide="save" class="w-4 h-4"></i> Project Manager
+        </button>
+        <button id="btn-reset" class="w-full rounded-xl py-2.5 font-semibold border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]">
+          Reset Session
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden dark:bg-[#121212] bg-gray-50">
+      <header class="h-16 shrink-0 border-b dark:border-[#2a2a2a] border-gray-200 dark:bg-yt-black bg-white px-4 md:px-6 flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3 md:gap-4">
+          <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2a2a2a]">
+            <i data-lucide="menu"></i>
+          </button>
+
+          <div class="rounded-full p-1 dark:bg-[#2a2a2a] bg-gray-200 flex items-center">
+            <button id="toggle-id" class="px-4 py-1.5 rounded-full text-sm font-semibold shadow bg-white text-gray-900 dark:bg-yt-black dark:text-white">🇮🇩 Indonesia</button>
+            <button id="toggle-intl" class="px-4 py-1.5 rounded-full text-sm font-semibold text-gray-500 dark:text-gray-400">🌍 International</button>
+          </div>
+
+          <div class="hidden lg:flex items-center gap-2 border-l pl-4 ml-1 dark:border-[#2a2a2a] border-gray-300">
+            <span id="badge-category" class="hidden chip bg-gray-100 dark:bg-[#2a2a2a] border border-gray-200 dark:border-[#3a3a3a]"><i data-lucide="folder" class="w-3 h-3"></i><span id="badge-category-text"></span></span>
+            <span id="badge-idea" class="hidden chip bg-gray-100 dark:bg-[#2a2a2a] border border-gray-200 dark:border-[#3a3a3a]"><i data-lucide="lightbulb" class="w-3 h-3"></i><span id="badge-idea-text"></span></span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button id="btn-theme" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#2a2a2a]">
+            <i data-lucide="moon-star" class="dark:hidden"></i>
+            <i data-lucide="sun" class="hidden dark:inline"></i>
+          </button>
+          <span class="chip bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300 border border-green-200 dark:border-green-800">
+            <i data-lucide="zap" class="w-3 h-3"></i> AI Ready
+          </span>
+        </div>
+      </header>
+
+      <div id="restore-bar" class="hidden bg-blue-600 text-white px-4 md:px-6 py-2 flex items-center justify-between gap-3 text-sm">
+        <div class="flex items-center gap-2">
+          <i data-lucide="info" class="w-4 h-4"></i>
+          <span>Ketemu sesi sebelumnya yang belum disimpan.</span>
+        </div>
+        <div class="flex gap-2">
+          <button id="btn-restore" class="px-3 py-1.5 rounded-lg bg-white text-blue-600 font-semibold">Restore</button>
+          <button id="btn-discard" class="px-3 py-1.5 rounded-lg hover:underline">Abaikan</button>
+        </div>
+      </div>
+
+      <div id="main-scroll" class="flex-1 overflow-y-auto p-4 md:p-8">
+        <div class="max-w-6xl mx-auto pb-24 space-y-8">
+
+          <!-- Category -->
+          <section id="section-category" class="section-content active">
+            <div class="mb-6">
+              <h2 class="text-2xl md:text-3xl font-extrabold flex items-center gap-2"><i data-lucide="layout-grid" class="text-red-500"></i> Pilih Kategori Konten</h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Pilih kategori untuk membuat ide, script, voiceover, dan SEO jadi lebih relevan.</p>
+            </div>
+            <div class="relative mb-5">
+              <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+              <input id="category-search" type="text" placeholder="Cari kategori atau subkategori..." class="w-full rounded-2xl pl-11 pr-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+            </div>
+            <div id="category-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+          </section>
+
+          <!-- Ideation -->
+          <section id="section-ideation" class="section-content">
+            <div class="mb-6">
+              <h2 class="text-2xl md:text-3xl font-extrabold flex items-center gap-2"><i data-lucide="lightbulb" class="text-yellow-500"></i> Content Ideation</h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Masukkan topik kasar, lalu pilih ide paling kuat.</p>
+            </div>
+
+            <div class="glass rounded-3xl p-5 md:p-6 mb-5">
+              <label class="block text-sm font-semibold mb-2">Topik</label>
+              <div class="flex flex-col md:flex-row gap-3">
+                <input id="topic-input" type="text" placeholder="contoh: sejarah WWII, review iPhone, investasi saham..." class="flex-1 rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+                <button id="btn-generate-ideas" class="bg-red-600 hover:bg-red-700 text-white rounded-2xl px-5 py-3 font-semibold flex items-center justify-center gap-2">
+                  <i data-lucide="sparkles" class="w-4 h-4"></i> Generate
+                </button>
+              </div>
+              <div id="idea-warning" class="hidden mt-3 text-sm text-yellow-600 dark:text-yellow-400 flex items-center gap-2">
+                <i data-lucide="alert-triangle" class="w-4 h-4"></i> Pilih kategori dulu biar ide lebih tajam.
+              </div>
+            </div>
+
+            <div id="idea-skeleton" class="hidden space-y-3 mb-5">
+              <div class="h-28 rounded-2xl skeleton"></div>
+              <div class="h-28 rounded-2xl skeleton"></div>
+              <div class="h-28 rounded-2xl skeleton"></div>
+            </div>
+
+            <div id="ideas-results" class="hidden">
+              <div class="mb-3 flex items-center justify-between gap-3">
+                <h3 class="font-bold text-lg">Pilih Salah Satu Ide</h3>
+                <span class="text-xs text-gray-500 dark:text-gray-400">Klik kartu untuk menyimpan ke state</span>
+              </div>
+              <div id="ideas-container" class="grid gap-4"></div>
+            </div>
+          </section>
+
+          <!-- Script -->
+          <section id="section-script" class="section-content">
+            <div class="mb-6">
+              <h2 class="text-2xl md:text-3xl font-extrabold flex items-center gap-2"><i data-lucide="file-text" class="text-red-500"></i> Script Generator</h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Atur durasi, gaya, dan level detail untuk naskah video.</p>
+            </div>
+
+            <div id="script-warning" class="glass rounded-2xl p-4 mb-5 border border-yellow-300 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-900 dark:text-yellow-200">
+              <div class="font-semibold">Syarat belum lengkap</div>
+              <div class="text-sm mt-1">Pilih <b>Kategori</b> dan <b>Ide</b> dulu sebelum generate script.</div>
+            </div>
+
+            <div id="script-form" class="opacity-50 pointer-events-none space-y-5">
+              <div class="glass rounded-3xl p-4 md:p-5 grid md:grid-cols-3 gap-4">
+                <div>
+                  <div class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Target Audiens</div>
+                  <div id="script-audience" class="font-semibold">-</div>
+                </div>
+                <div class="md:col-span-2">
+                  <div class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Ide Terpilih</div>
+                  <div id="script-idea" class="font-semibold truncate">-</div>
+                </div>
+              </div>
+
+
+              <div class="glass rounded-3xl p-5 mb-5">
+                <h3 class="font-bold mb-4 flex items-center gap-2"><i data-lucide="pen-square" class="w-4 h-4 text-red-500"></i> Custom Brief</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-semibold mb-2">Judul Manual / Override</label>
+                    <input id="script-title-input" type="text" placeholder="contoh: Kenapa AI Bisa Mengubah Semua?" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-semibold mb-2">Brief / Angle Manual</label>
+                    <input id="script-brief-input" type="text" placeholder="contoh: sudut pandang investigatif, santai, atau edukatif" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+                  </div>
+                </div>
+              </div>
+              <div class="glass rounded-3xl p-5">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="font-bold flex items-center gap-2"><i data-lucide="clock-3" class="w-4 h-4 text-red-500"></i> Duration</h3>
+                  <span id="duration-label" class="text-sm text-gray-500 dark:text-gray-400">10 menit</span>
+                </div>
+                <input id="duration-slider" type="range" min="0" max="11" value="6" class="w-full">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-5">
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-xs text-gray-500">Target Durasi</div><div id="disp-duration" class="font-bold mt-1">10 Menit</div></div>
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-xs text-gray-500">Est. Kata</div><div id="disp-words" class="font-bold mt-1 text-blue-500">~1,400</div></div>
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-xs text-gray-500">Jenis</div><div id="disp-type" class="font-bold mt-1 text-green-500">Mid-Form</div></div>
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-xs text-gray-500">Waktu Baca</div><div id="disp-read" class="font-bold mt-1 text-purple-500">10m 00s</div></div>
+                </div>
+              </div>
+
+              <div class="glass rounded-3xl p-5">
+                <h3 class="font-bold mb-4 flex items-center gap-2"><i data-lucide="settings-2" class="w-4 h-4 text-red-500"></i> Settings</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <select id="set-age" class="rounded-xl p-2.5 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"><option value="Everyone">Everyone</option><option value="Kids">Kids</option><option value="Teens">Teens</option><option value="Adults">Adults</option></select>
+                  <select id="set-exp" class="rounded-xl p-2.5 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"><option value="Beginner">Beginner</option><option value="Intermediate">Intermediate</option><option value="Expert">Expert</option></select>
+                  <select id="set-style" class="rounded-xl p-2.5 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"><option value="Casual">Casual</option><option value="Documentary">Documentary</option><option value="Storytelling">Storytelling</option><option value="Educational">Educational</option><option value="Dramatic">Dramatic</option></select>
+                  <select id="set-hook" class="rounded-xl p-2.5 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"><option value="Curiosity">Curiosity</option><option value="Shock">Shock</option><option value="Question">Question</option><option value="Fact">Fact</option><option value="Story">Story</option></select>
+                  <select id="set-cta" class="rounded-xl p-2.5 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"><option value="Medium">Medium</option><option value="Soft">Soft</option><option value="Strong">Strong</option></select>
+                  <select id="set-detail" class="rounded-xl p-2.5 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"><option value="Normal">Normal</option><option value="Short">Short</option><option value="Detailed">Detailed</option><option value="Extremely Detailed">Extremely Detailed</option></select>
+                  <select id="set-speed" class="rounded-xl p-2.5 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"><option value="Normal">Normal</option><option value="Slow">Slow</option><option value="Fast">Fast</option></select>
+                  <select id="set-emotion" class="rounded-xl p-2.5 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"><option value="Excited">Excited</option><option value="Calm">Calm</option><option value="Serious">Serious</option><option value="Suspense">Suspense</option><option value="Inspirational">Inspirational</option></select>
+                </div>
+              </div>
+
+              <button id="btn-generate-script" class="w-full bg-red-600 hover:bg-red-700 text-white rounded-2xl py-4 font-extrabold flex items-center justify-center gap-2">
+                <i data-lucide="pen-tool" class="w-5 h-5"></i> Tulis Script
+              </button>
+            </div>
+
+            <div id="script-skeleton" class="hidden glass rounded-3xl p-5 mt-5 space-y-3">
+              <div class="h-6 w-1/3 rounded skeleton"></div>
+              <div class="h-4 w-full rounded skeleton"></div>
+              <div class="h-4 w-full rounded skeleton"></div>
+              <div class="h-4 w-5/6 rounded skeleton"></div>
+              <div class="h-4 w-full rounded skeleton"></div>
+            </div>
+
+            <div id="script-result" class="hidden mt-5 glass rounded-3xl overflow-hidden border border-gray-200 dark:border-[#3a3a3a]">
+              <div class="p-3 md:p-4 border-b dark:border-[#3a3a3a] border-gray-200 flex flex-wrap items-center justify-between gap-2 dark:bg-[#1a1a1a] bg-gray-100">
+                <div class="font-bold flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i> Script Selesai</div>
+                <div class="flex gap-2">
+                  <button class="btn-copy text-xs px-3 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#222] flex items-center gap-1" data-target-id="script-output"><i data-lucide="copy" class="w-3 h-3"></i> Copy</button>
+                  <button id="btn-download-script" class="text-xs px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white">TXT</button>
+                </div>
+              </div>
+              <div class="p-0">
+                <div class="px-4 py-2 text-xs flex flex-wrap gap-3 border-b dark:border-[#3a3a3a] border-gray-200 dark:bg-[#111] bg-gray-50 text-gray-500">
+                  <span>Words: <b id="stat-words">0</b></span>
+                  <span>Chars: <b id="stat-chars">0</b></span>
+                  <span>Est. Length: <b id="stat-time">0m 0s</b></span>
+                  <span>Readability: <b id="stat-score">Normal</b></span>
+                </div>
+                <textarea id="script-output" class="w-full min-h-[500px] p-5 bg-transparent resize-y font-mono text-sm leading-relaxed dark:text-gray-200 text-gray-800" spellcheck="false"></textarea>
+              </div>
+            </div>
+          </section>
+
+          <!-- Voiceover -->
+          <section id="section-voiceover" class="section-content">
+            <div class="mb-6">
+              <h2 class="text-2xl md:text-3xl font-extrabold flex items-center gap-2"><i data-lucide="mic-vocal" class="text-sky-400"></i> Voiceover Generator</h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Buat naskah voiceover, SSML ringan, dan panduan suara untuk TTS atau rekaman manual.</p>
+            </div>
+
+            <div id="vo-warning" class="glass rounded-2xl p-4 mb-5 border border-yellow-300 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-900 dark:text-yellow-200">
+              <div class="font-semibold">Script belum tersedia</div>
+              <div class="text-sm mt-1">Generate script dulu, atau isi teks manual di kolom input voiceover.</div>
+            </div>
+
+            <div id="vo-form" class="space-y-5 opacity-50 pointer-events-none">
+              <div class="glass rounded-3xl p-5 grid md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-semibold mb-2">Sumber Narasi</label>
+                  <select id="vo-source" class="w-full rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+                    <option value="script">Pakai Script Generator</option>
+                    <option value="manual">Manual</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-2">Target Platform</label>
+                  <select id="vo-platform" class="w-full rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+                    <option value="elevenlabs">ElevenLabs</option>
+                    <option value="tts">TTS Lain / Rekaman Manual</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-2">Voice Persona</label>
+                  <input id="vo-persona-input" type="text" value="Pria muda, tegas, natural, engaging" class="w-full rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-2">Mood</label>
+                  <select id="vo-emotion" class="w-full rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+                    <option value="Excited">Excited</option>
+                    <option value="Calm">Calm</option>
+                    <option value="Serious">Serious</option>
+                    <option value="Suspense">Suspense</option>
+                    <option value="Inspirational">Inspirational</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-2">Speaking Speed</label>
+                  <select id="vo-speed" class="w-full rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+                    <option value="Slow">Slow</option>
+                    <option value="Normal" selected>Normal</option>
+                    <option value="Fast">Fast</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-2">SSML Mode</label>
+                  <select id="vo-ssml" class="w-full rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+                    <option value="light">Light Pauses</option>
+                    <option value="medium">Medium Pauses</option>
+                    <option value="heavy">Heavy Pauses</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="glass rounded-3xl p-5">
+                <label class="block text-sm font-semibold mb-2">Voiceover Text / Script</label>
+                <textarea id="vo-input" class="w-full min-h-56 rounded-2xl p-4 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a] font-mono text-sm" placeholder="Script voiceover akan muncul di sini..."></textarea>
+                <div class="mt-3 flex gap-2 flex-wrap">
+                  <button id="btn-vo-from-script" class="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-semibold flex items-center gap-2"><i data-lucide="wand-sparkles" class="w-4 h-4"></i> Ambil dari Script</button>
+                  <button id="btn-generate-vo" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold flex items-center gap-2"><i data-lucide="mic-vocal" class="w-4 h-4"></i> Generate Voiceover</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="vo-result" class="hidden mt-5 space-y-5">
+              <div class="glass rounded-3xl p-5">
+                <div class="flex items-center justify-between gap-3 mb-4">
+                  <h3 class="font-bold flex items-center gap-2"><i data-lucide="settings-2" class="w-4 h-4 text-sky-400"></i> Parameter Voice</h3>
+                  <div class="flex gap-2">
+                    <button class="btn-copy text-xs px-3 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#222]" data-target-id="vo-output"><i data-lucide="copy" class="w-3 h-3"></i> Copy</button>
+                    <button id="btn-download-vo" class="text-xs px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white">MP3</button>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-[11px] uppercase text-gray-500">Stability</div><div id="vo-stability" class="font-bold mt-1">—</div></div>
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-[11px] uppercase text-gray-500">Similarity</div><div id="vo-similarity" class="font-bold mt-1">—</div></div>
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-[11px] uppercase text-gray-500">Style</div><div id="vo-style" class="font-bold mt-1">—</div></div>
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-[11px] uppercase text-gray-500">Boost</div><div id="vo-boost" class="font-bold mt-1">—</div></div>
+                </div>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="glass rounded-3xl p-5">
+                  <div class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Voice Persona</div>
+                  <div id="vo-persona-view" class="font-semibold">-</div>
+                </div>
+                <div class="glass rounded-3xl p-5">
+                  <div class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">Intonation Tips</div>
+                  <div id="vo-tips" class="font-semibold text-sm">-</div>
+                </div>
+              </div>
+
+              <div class="glass rounded-3xl overflow-hidden">
+                <div class="p-3 md:p-4 border-b dark:border-[#3a3a3a] border-gray-200 flex items-center justify-between dark:bg-[#1a1a1a] bg-gray-100">
+                  <div class="font-bold flex items-center gap-2"><i data-lucide="file-audio" class="w-4 h-4"></i> Voiceover Output</div>
+                </div>
+                <textarea id="vo-output" class="w-full min-h-80 p-5 bg-transparent resize-y font-mono text-sm dark:text-gray-200 text-gray-800" spellcheck="false"></textarea>
+              </div>
+            </div>
+          </section>
+
+          <!-- Thumbnail -->
+          <section id="section-thumbnail" class="section-content">
+            <div class="mb-6">
+              <h2 class="text-2xl md:text-3xl font-extrabold flex items-center gap-2"><i data-lucide="image" class="text-purple-400"></i> Thumbnail Ideas</h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Buat 3 konsep thumbnail yang fokus CTR.</p>
+            </div>
+
+            <div id="thumb-warning" class="glass rounded-2xl p-4 mb-5 border border-yellow-300 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-900 dark:text-yellow-200">
+              <div class="font-semibold">Ide belum dipilih</div>
+              <div class="text-sm mt-1">Pilih ide konten dulu sebelum generate thumbnail.</div>
+            </div>
+
+            <div id="thumb-form" class="opacity-50 pointer-events-none">
+              <div class="glass rounded-3xl p-5 mb-5 space-y-4">
+                <div>
+                  <label class="block text-sm font-semibold mb-2">Thumbnail Brief / Judul Manual</label>
+                  <input id="thumb-brief-input" type="text" placeholder="contoh: konflik besar, reaksi kaget, fakta mengejutkan" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-2">Style Preferensi</label>
+                  <input id="thumb-style-input" type="text" placeholder="contoh: cinematic, high contrast, bold text" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+                </div>
+                <button id="btn-generate-thumb" class="w-full px-4 py-3 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white font-extrabold flex items-center justify-center gap-2">
+                  <i data-lucide="palette" class="w-4 h-4"></i> Generate 3 Konsep Thumbnail
+                </button>
+              </div>
+            </div>
+
+            <div id="thumb-skeleton" class="hidden space-y-4">
+              <div class="h-44 rounded-3xl skeleton"></div>
+              <div class="h-44 rounded-3xl skeleton"></div>
+              <div class="h-44 rounded-3xl skeleton"></div>
+            </div>
+
+            <div id="thumb-results" class="hidden space-y-4"></div>
+          </section>
+
+          <!-- SEO -->
+          <section id="section-seo" class="section-content">
+            <div class="mb-6">
+              <h2 class="text-2xl md:text-3xl font-extrabold flex items-center gap-2"><i data-lucide="search" class="text-green-500"></i> Title & SEO</h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Judul, tags, hashtag, dan deskripsi siap pakai.</p>
+            </div>
+
+            <div id="seo-warning" class="glass rounded-2xl p-4 mb-5 border border-yellow-300 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-900 dark:text-yellow-200">
+              <div class="font-semibold">Ide belum dipilih</div>
+              <div class="text-sm mt-1">Pilih ide konten dulu sebelum generate SEO.</div>
+            </div>
+
+            <div id="seo-form" class="opacity-50 pointer-events-none">
+              <div class="glass rounded-3xl p-5 mb-5 space-y-4">
+                <div>
+                  <label class="block text-sm font-semibold mb-2">SEO Brief / Keyword Manual</label>
+                  <input id="seo-brief-input" type="text" placeholder="contoh: panduan AI, cara investasi, misteri sejarah" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold mb-2">Target Negara</label>
+                  <select id="seo-country-input" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
+                    <option value="Indonesia">Indonesia</option>
+                    <option value="Global">Global</option>
+                    <option value="United States">United States</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="Malaysia">Malaysia</option>
+                  </select>
+                </div>
+                <button id="btn-generate-seo" class="w-full px-4 py-3 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-extrabold flex items-center justify-center gap-2">
+                  <i data-lucide="bar-chart" class="w-4 h-4"></i> Generate SEO
+                </button>
+              </div>
+            </div>
+
+            <div id="seo-results" class="hidden space-y-5">
+              <div class="glass rounded-3xl p-5">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-[11px] uppercase text-gray-500">Primary Keyword</div><div id="seo-primary" class="font-bold mt-1 text-red-500">-</div></div>
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-[11px] uppercase text-gray-500">Secondary Keyword</div><div id="seo-secondary" class="font-semibold mt-1">-</div></div>
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-[11px] uppercase text-gray-500">Intent</div><div id="seo-intent" class="font-semibold mt-1 text-blue-500">-</div></div>
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-[11px] uppercase text-gray-500">CTR Score</div><div id="seo-ctr" class="font-bold mt-1 text-green-500">-</div></div>
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-[11px] uppercase text-gray-500">Target Country</div><div id="seo-country" class="font-semibold mt-1">-</div></div>
+                  <div class="p-3 rounded-2xl dark:bg-[#1a1a1a] bg-gray-100"><div class="text-[11px] uppercase text-gray-500">Upload Rec.</div><div id="seo-upload" class="font-semibold mt-1 text-purple-500">-</div></div>
+                </div>
+              </div>
+
+              <div class="glass rounded-3xl p-5">
+                <div class="flex items-center justify-between mb-3"><h3 class="font-bold">Title Variations</h3><button class="btn-copy text-xs px-3 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#222]" data-target-id="seo-titles"><i data-lucide="copy" class="w-3 h-3"></i> Copy All</button></div>
+                <div id="seo-titles" class="space-y-2"></div>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="glass rounded-3xl p-5">
+                  <div class="flex items-center justify-between mb-3"><h3 class="font-bold">Tags</h3><button class="btn-copy text-xs px-3 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#222]" data-target-id="seo-tags"><i data-lucide="copy" class="w-3 h-3"></i></button></div>
+                  <textarea id="seo-tags" readonly class="w-full h-28 rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"></textarea>
+                </div>
+                <div class="glass rounded-3xl p-5">
+                  <div class="flex items-center justify-between mb-3"><h3 class="font-bold">Hashtags & Density</h3></div>
+                  <div class="space-y-4">
+                    <div><div class="text-xs text-gray-500 mb-1">Hashtags</div><div id="seo-hashtags" class="font-semibold text-blue-500"></div></div>
+                    <div><div class="text-xs text-gray-500 mb-1">Density</div><div id="seo-density" class="inline-block rounded-xl px-3 py-2 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"></div></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="glass rounded-3xl p-5">
+                <div class="flex items-center justify-between mb-3"><h3 class="font-bold">Description</h3><button class="btn-copy text-xs px-3 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#222]" data-target-id="seo-desc"><i data-lucide="copy" class="w-3 h-3"></i></button></div>
+                <textarea id="seo-desc" readonly class="w-full h-56 rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"></textarea>
+              </div>
+            </div>
+          </section>
+
+          <!-- Checklist -->
+          <section id="section-checklist" class="section-content">
+            <div class="mb-6">
+              <h2 class="text-2xl md:text-3xl font-extrabold flex items-center gap-2"><i data-lucide="check-square" class="text-emerald-400"></i> Content Checklist</h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Checklist sebelum publish.</p>
+            </div>
+
+            <div class="glass rounded-3xl p-5 max-w-2xl mx-auto">
+              <div id="checklist-container" class="space-y-3"></div>
+              <div class="mt-6 pt-4 border-t dark:border-[#3a3a3a] border-gray-200 flex items-center justify-center">
+                <div class="relative w-28 h-28 rounded-full border-4 dark:border-[#2a2a2a] border-gray-200">
+                  <div id="check-progress" class="absolute inset-0 flex items-center justify-center font-extrabold text-xl">0%</div>
+                  <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="46" fill="transparent" class="dark:stroke-[#2a2a2a] stroke-gray-200" stroke-width="8"></circle>
+                    <circle id="check-circle" cx="50" cy="50" r="46" fill="transparent" stroke="#ff0000" stroke-width="8" stroke-dasharray="289" stroke-dashoffset="289"></circle>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-3"></div>
+
+  <!-- Project Modal -->
+  <div id="save-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm p-4">
+    <div class="max-w-2xl w-full mx-auto mt-10 glass rounded-3xl overflow-hidden">
+      <div class="p-4 border-b dark:border-[#3a3a3a] border-gray-200 flex items-center justify-between dark:bg-[#1a1a1a] bg-gray-100">
+        <div class="font-extrabold flex items-center gap-2"><i data-lucide="archive" class="text-red-500"></i> Project Manager</div>
+        <button id="btn-close-modal" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#2a2a2a]"><i data-lucide="x"></i></button>
+      </div>
+      <div class="p-5 space-y-5">
+        <div class="glass rounded-2xl p-4">
+          <div class="font-bold mb-2">Export Project</div>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Download seluruh state project ke file.</p>
+          <div class="flex flex-wrap gap-2">
+            <button id="btn-export-json" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold">JSON</button>
+            <button id="btn-export-txt" class="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold">TXT</button>
+            <button id="btn-export-md" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold">Markdown</button>
+          </div>
+        </div>
+        <div class="glass rounded-2xl p-4">
+          <div class="font-bold mb-2">Import Project</div>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Masukkan file JSON hasil export sebelumnya.</p>
+          <input id="file-import" type="file" accept=".json" class="hidden">
+          <button id="btn-trigger-import" class="px-4 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-semibold">Upload JSON File</button>
+        </div>
+      </div>
+      <div class="p-4 border-t dark:border-[#3a3a3a] border-gray-200 text-xs text-center text-gray-500 dark:text-gray-400">
+        Auto-save aktif ke LocalStorage.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DURATION_MAP = [
+      { label: '30 detik', min: 0.5, type: 'Shorts/Reels' },
+      { label: '1 menit', min: 1, type: 'Shorts/Reels' },
+      { label: '2 menit', min: 2, type: 'Short-Form' },
+      { label: '3 menit', min: 3, type: 'Short-Form' },
+      { label: '5 menit', min: 5, type: 'Mid-Form' },
+      { label: '8 menit', min: 8, type: 'Mid-Form' },
+      { label: '10 menit', min: 10, type: 'Mid-Form' },
+      { label: '15 menit', min: 15, type: 'Long-Form' },
+      { label: '20 menit', min: 20, type: 'Long-Form' },
+      { label: '30 menit', min: 30, type: 'Documentary' },
+      { label: '45 menit', min: 45, type: 'Deep-Dive' },
+      { label: '60 menit', min: 60, type: 'Masterclass' }
+    ];
+
+    const CATEGORIES_DATA = {
+      "Teknologi": { icon:"🖥️", tone:"Informatif, analitis, futuristik", subs:["Gadget & Review","Artificial Intelligence","Software & Aplikasi","Cybersecurity & Hacking","Programming & Coding","Startup & Tech Business","Space Tech & Robotik","Internet & Media Sosial"]},
+      "Gaming": { icon:"🎮", tone:"Energetik, santai, hype", subs:["Review Game","Tips & Trick Game","Esports & Turnamen","Game Lore & Cerita","Retro Gaming","Mobile Gaming","PC / Console Gaming","Game Indie"]},
+      "Sejarah": { icon:"📜", tone:"Naratif, berwibawa, dramatis", subs:["Sejarah Dunia","Sejarah Indonesia","Perang & Militer","Peradaban Kuno","Tokoh Bersejarah","Misteri Sejarah","Revolusi & Politik","Artefak Kuno"]},
+      "Bisnis & Finansial": { icon:"💰", tone:"Profesional, data-driven, motivatif", subs:["Investasi & Saham","Crypto & Blockchain","Cara Menghasilkan Uang","Kisah Sukses Pengusaha","Marketing & Branding","E-commerce & Dropship","Personal Finance","Startup Failure Story"]},
+      "Sains & Edukasi": { icon:"🧠", tone:"Eksploratif, jelas, akademis ringan", subs:["Fisika & Alam Semesta","Biologi & Tubuh Manusia","Kimia & Eksperimen","Psikologi & Perilaku","Matematika & Logika","Geografi & Bumi","Lingkungan & Iklim","Medis & Kesehatan"]},
+      "Hiburan & Pop Culture": { icon:"🎭", tone:"Casual, up-to-date, opini kuat", subs:["Drama & Gosip Selebriti","Review Film & Series","Musik & Industri","Anime & Manga","Meme & Internet Culture","Behind The Scene","Award & Penghargaan","Trending Topic"]},
+      "Misteri & Paranormal": { icon:"🔮", tone:"Mencekam, misterius, bikin penasaran", subs:["Urban Legend","Kisah Horor Nyata","Fenomena Tak Terjelas","Alien & UFO","Haunted Places","Cryptid","Okultisme & Ritual","True Crime Mystery"]},
+      "Personal & Motivasi": { icon:"👤", tone:"Hangat, jujur, inspiratif", subs:["Self Improvement","Produktivitas & Habit","Mental Health","Kisah Inspiratif","Pengalaman Pribadi","Relationship","Parenting","Minimalism"]},
+      "Olahraga": { icon:"⚽", tone:"Hype, kompetitif, analitis", subs:["Sepak Bola","Basket & NBA","MMA & Combat Sports","Olahraga Ekstrem","Kisah Atlet","Olimpiade & Event","Analisis Pertandingan","Olahraga Tradisional"]},
+      "Hiburan Ringan": { icon:"😂", tone:"Lucu, cepat, engaging", subs:["Fakta Unik & Aneh","Rangkuman & Kompilasi","Challenge & Eksperimen","Reaksi & Commentary","Parodi & Satire","Opini & Essay","Ranking & List","Myth Busting"]}
+    };
+
+    const CHECKLIST_ITEMS = [
+      { id:'c1', label:'Ide konten & kategori sudah ditetapkan' },
+      { id:'c2', label:'Script utama selesai ditulis dan di-review' },
+      { id:'c3', label:'Voiceover siap untuk rekaman / TTS' },
+      { id:'c4', label:'Thumbnail sudah didesain' },
+      { id:'c5', label:'Judul final dan tags sudah disiapkan' },
+      { id:'c6', label:'Deskripsi video sudah ditulis' },
+      { id:'c7', label:'Subtitle / CC sudah direncanakan' },
+      { id:'c8', label:'Pinned comment sudah dikonsep' },
+      { id:'c9', label:'B-roll / aset visual sudah siap' },
+      { id:'c10', label:'Upload checklist sudah selesai' }
+    ];
+
+    const STATE = {
+      version: '4.0',
+      theme: 'dark',
+      audience: 'id',
+      category: null,
+      topic: '',
+      selectedIdea: null,
+      customScriptTitle: '',
+      customScriptBrief: '',
+      thumbnailBrief: '',
+      thumbnailStyle: '',
+      seoBrief: '',
+      seoCountry: 'Indonesia',
+      scriptSettings: {
+        durationIndex: 6,
+        age: 'Everyone',
+        experience: 'Beginner',
+        narrationStyle: 'Casual',
+        hookStyle: 'Curiosity',
+        ctaStyle: 'Medium',
+        detailLevel: 'Normal',
+        speakingSpeed: 'Normal',
+        emotion: 'Excited'
+      },
+      scriptData: { content: '' },
+      research: null,
+      voiceover: { content:'', persona:'', params:{}, audioUrl:'', mimeType:'audio/mpeg' },
+      thumbnails: [],
+      seo: null,
+      checklist: {}
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function toast(message, type='info') {
+      const el = document.createElement('div');
+      const styles = {
+        success: 'bg-emerald-600 text-white',
+        error: 'bg-red-600 text-white',
+        info: 'bg-blue-600 text-white'
+      };
+      el.className = `px-4 py-3 rounded-2xl shadow-xl flex items-start gap-3 ${styles[type] || styles.info}`;
+      el.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle-2' : type === 'error' ? 'alert-circle' : 'info'}" class="w-5 h-5 shrink-0 mt-0.5"></i><div class="text-sm font-medium leading-snug">${message}</div>`;
+      $('toast-container').appendChild(el);
+      lucide.createIcons();
+      setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateX(20px)'; el.style.transition = 'all .25s ease'; setTimeout(() => el.remove(), 250); }, 2500);
+    }
+
+    function saveState() {
+      localStorage.setItem('ytSuiteStateV3', JSON.stringify({ ...STATE, lastUpdated: new Date().toISOString() }));
+    }
+
+    function loadState() {
+      const raw = localStorage.getItem('ytSuiteStateV3');
+      if (!raw) return false;
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed.version !== STATE.version) return false;
+        Object.assign(STATE, parsed);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    function applyTheme() {
+      document.documentElement.classList.toggle('dark', STATE.theme === 'dark');
+      localStorage.setItem('ytSuiteTheme', STATE.theme);
+    }
+
+    function setTheme(theme) {
+      STATE.theme = theme;
+      applyTheme();
+      saveState();
+    }
+
+    function updateAudienceUI() {
+      const idBtn = $('toggle-id');
+      const intBtn = $('toggle-intl');
+      if (STATE.audience === 'id') {
+        idBtn.className = 'px-4 py-1.5 rounded-full text-sm font-semibold shadow bg-white text-gray-900 dark:bg-yt-black dark:text-white';
+        intBtn.className = 'px-4 py-1.5 rounded-full text-sm font-semibold text-gray-500 dark:text-gray-400';
+      } else {
+        intBtn.className = 'px-4 py-1.5 rounded-full text-sm font-semibold shadow bg-white text-gray-900 dark:bg-yt-black dark:text-white';
+        idBtn.className = 'px-4 py-1.5 rounded-full text-sm font-semibold text-gray-500 dark:text-gray-400';
+      }
+    }
+
+    function updateBadges() {
+      const catBadge = $('badge-category');
+      const ideaBadge = $('badge-idea');
+      if (STATE.category) {
+        catBadge.classList.remove('hidden');
+        $('badge-category-text').textContent = STATE.category.sub;
+      } else catBadge.classList.add('hidden');
+      if (STATE.selectedIdea) {
+        ideaBadge.classList.remove('hidden');
+        $('badge-idea-text').textContent = STATE.selectedIdea.title;
+      } else ideaBadge.classList.add('hidden');
+    }
+
+    function renderCategories(filter='') {
+      const grid = $('category-grid');
+      grid.innerHTML = '';
+      const q = filter.trim().toLowerCase();
+
+      Object.entries(CATEGORIES_DATA).forEach(([main, data]) => {
+        const matchesMain = main.toLowerCase().includes(q);
+        const matchesSubs = data.subs.filter(s => s.toLowerCase().includes(q));
+        if (q && !matchesMain && matchesSubs.length === 0) return;
+
+        const card = document.createElement('div');
+        card.className = 'glass rounded-3xl overflow-hidden';
+        card.innerHTML = `
+          <button class="w-full p-4 md:p-5 flex items-center justify-between gap-3 text-left">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-2xl flex items-center justify-center bg-red-600/10 text-2xl">${data.icon}</div>
+              <div>
+                <div class="font-extrabold">${main}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">${data.tone}</div>
+              </div>
+            </div>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
+          </button>
+          <div class="px-4 md:px-5 pb-4 grid gap-2 ${q ? '' : 'hidden'}">
+            ${(q && !matchesMain ? matchesSubs : data.subs).map(sub => {
+              const active = STATE.category && STATE.category.sub === sub;
+              return `<button class="subcat-btn text-left rounded-2xl px-3 py-2.5 border ${active ? 'border-red-500 bg-red-500/10 font-semibold' : 'border-gray-200 dark:border-[#3a3a3a] hover:bg-gray-50 dark:hover:bg-[#2a2a2a]'}" data-main="${main}" data-sub="${sub}" data-tone="${data.tone}">${sub}</button>`;
+            }).join('')}
+          </div>
+        `;
+        grid.appendChild(card);
+        card.querySelector('button').addEventListener('click', () => {
+          const content = card.querySelector('div:last-child');
+          content.classList.toggle('hidden');
+          card.querySelector('svg').classList.toggle('rotate-180');
+        });
+      });
+
+      document.querySelectorAll('.subcat-btn').forEach(btn => {
+        btn.addEventListener('click', () => selectCategory(btn.dataset.main, btn.dataset.sub, btn.dataset.tone));
+      });
+
+      lucide.createIcons();
+    }
+
+    function selectCategory(main, sub, tone) {
+      STATE.category = { main, sub, tone };
+      updateBadges();
+      updatePrereqState();
+      saveState();
+      toast(`Kategori dipilih: ${sub}`, 'success');
+    }
+
+    function renderIdeas(ideas) {
+      const container = $('ideas-container');
+      container.innerHTML = '';
+      ideas.forEach(idea => {
+        const isSel = STATE.selectedIdea && STATE.selectedIdea.title === idea.title;
+        const card = document.createElement('div');
+        card.className = `relative rounded-3xl p-5 border cursor-pointer transition-all ${isSel ? 'border-red-500 bg-red-500/10' : 'border-gray-200 dark:border-[#3a3a3a] hover:border-gray-400 dark:hover:border-gray-500 glass'}`;
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="font-extrabold text-lg">${idea.title}</div>
+              <div class="text-sm mt-2 text-gray-600 dark:text-gray-300"><b>Angle:</b> ${idea.angle}</div>
+              <div class="text-sm mt-1 text-gray-600 dark:text-gray-300"><b>Hook:</b> ${idea.hook}</div>
+              <div class="text-sm mt-1 text-gray-600 dark:text-gray-300"><b>Reason:</b> ${idea.reason}</div>
+            </div>
+            <span class="text-xs font-bold px-2 py-1 rounded-xl border ${idea.potential === 'High' ? 'border-green-500 text-green-500' : 'border-yellow-500 text-yellow-500'}">${idea.potential}</span>
+          </div>
+          ${isSel ? '<div class="absolute top-3 right-3 text-red-500"><i data-lucide="check-circle-2"></i></div>' : ''}
+        `;
+        card.addEventListener('click', () => {
+          STATE.selectedIdea = idea;
+          updateBadges();
+          updatePrereqState();
+          saveState();
+          renderIdeas(ideas);
+          toast('Ide dipilih. Lanjut ke script.', 'success');
+        });
+        container.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    function generateIdeas() {
+      const topic = $('topic-input').value.trim();
+      if (!topic) return toast('Masukkan topik dulu.', 'error');
+      if (!STATE.category) $('idea-warning').classList.remove('hidden');
+
+      $('ideas-results').classList.add('hidden');
+      $('idea-skeleton').classList.remove('hidden');
+      $('btn-generate-ideas').disabled = true;
+      $('btn-generate-ideas').innerHTML = '<span class="spinner"></span> Generate';
+
+      setTimeout(() => {
+        const base = STATE.category ? STATE.category.sub : 'General';
+        const ideas = [
+          { title: `Kenapa ${topic} Bisa Meledak?`, hook: `Kamu mungkin nggak nyangka kalau ${topic} punya sisi yang jauh lebih besar dari kelihatannya.`, angle: `Membahas alasan kenapa ${topic} menarik untuk audiens ${base}.`, potential: 'High', reason: 'Punya rasa penasaran dan mudah diklik.' },
+          { title: `3 Fakta Tentang ${topic} yang Jarang Dibahas`, hook: `Di balik ${topic}, ada beberapa fakta yang sering dilewatkan orang.`, angle: `Listicle cepat dengan data kuat.`, potential: 'High', reason: 'Format angka cenderung menarik CTR.' },
+          { title: `Apa yang Sebenarnya Terjadi di Balik ${topic}?`, hook: `Kalau dilihat sekilas, ${topic} terlihat simpel. Tapi kenyataannya jauh lebih rumit.`, angle: `Narasi investigatif / eksploratif.`, potential: 'Medium', reason: 'Cocok untuk storytelling dan retention.' },
+          { title: `Kesalahan Terbesar Saat Membahas ${topic}`, hook: `Banyak orang salah paham saat ngomongin ${topic}.`, angle: `Myth-busting dan koreksi miskonsepsi.`, potential: 'Medium', reason: 'Bagus untuk audience yang suka klarifikasi.' },
+          { title: `Versi Singkat: ${topic} dalam 10 Menit`, hook: `Kalau kamu cuma punya waktu sebentar, ini ringkasan paling penting soal ${topic}.`, angle: `Edukasi cepat dan padat.`, potential: 'High', reason: 'Pencarian intent tinggi dan mudah dipahami.' }
+        ];
+        STATE.topic = topic;
+        renderIdeas(ideas);
+        $('ideas-results').classList.remove('hidden');
+        $('idea-skeleton').classList.add('hidden');
+        $('btn-generate-ideas').disabled = false;
+        $('btn-generate-ideas').innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Generate';
+        saveState();
+        lucide.createIcons();
+      }, 500);
+    }
+
+    function updateDurationDisplay(idx) {
+      const d = DURATION_MAP[idx];
+      $('disp-duration').textContent = d.label.replace('detik','Detik').replace('menit','Menit');
+      $('disp-type').textContent = d.type;
+      $('disp-words').textContent = `~${Math.round(d.min * 140).toLocaleString()}`;
+      const mm = Math.floor(d.min);
+      const ss = Math.round((d.min % 1) * 60);
+      $('disp-read').textContent = `${mm}m ${String(ss).padStart(2,'0')}s`;
+      $('duration-label').textContent = d.label;
+    }
+
+    function scriptTextFromState() {
+      const cfg = DURATION_MAP[STATE.scriptSettings.durationIndex];
+      const words = Math.round(cfg.min * 140);
+      const s = STATE.scriptSettings;
+      const idea = STATE.selectedIdea || { title:'Topik', hook:'Hook belum tersedia', angle:'', reason:'' };
+      const intro = STATE.audience === 'id' ? 'Bahasa Indonesia' : 'English';
+
+      return `# ${idea.title}
+
+**Target Audience:** ${intro}
+**Category:** ${STATE.category ? `${STATE.category.main} - ${STATE.category.sub}` : '-'}
+**Angle:** ${idea.angle}
+**Duration Target:** ${cfg.label} (${cfg.type})
+**Est. Word Count:** ~${words} kata
+
+---
+
+## HOOK
+${idea.hook}
+
+## INTRO
+Pernah nggak kamu merasa kalau ${STATE.topic || idea.title} itu cuma kelihatannya sederhana, padahal di baliknya ada banyak hal penting yang jarang dibahas? Di video ini kita bakal bedah semuanya dengan gaya ${s.narrationStyle.toLowerCase()}.
+
+## BODY
+### BAB 1
+Mulai dari konteks dasarnya dulu, supaya semua penonton, termasuk ${s.age.toLowerCase()}, bisa langsung paham tanpa bingung. Penjelasannya dibuat ${s.detailLevel.toLowerCase()} dengan pacing ${s.speakingSpeed.toLowerCase()}.
+
+### BAB 2
+Masuk ke inti masalah: kenapa topik ini menarik, apa yang sering disalahpahami, dan apa fakta paling penting yang wajib kamu tahu. Tone: ${s.emotion.toLowerCase()}.
+
+### BAB 3
+Sekarang kita lihat dampaknya. Bagian ini dibuat lebih naratif supaya retention tetap tinggi dan penonton mau lanjut nonton sampai akhir.
+
+## PAYOFF
+Jadi, inti paling penting dari pembahasan ini adalah: jangan cuma lihat permukaannya. Selalu lihat konteks, pola, dan detail yang sering dilewatkan.
+
+## CTA
+Kalau kamu suka format seperti ini, jangan lupa like, subscribe, dan komen topik berikutnya yang mau dibahas.`;
+
+    }
+
+    function updateScriptStats() {
+      const text = $('script-output').value || '';
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      const chars = text.length;
+      const duration = words / 140;
+      $('stat-words').textContent = words.toLocaleString();
+      $('stat-chars').textContent = chars.toLocaleString();
+      $('stat-time').textContent = `${Math.floor(duration)}m ${Math.round((duration % 1) * 60)}s`;
+      let score = 'Normal';
+      if (words > 0) {
+        const cpw = chars / words;
+        score = cpw < 5.5 ? 'Easy' : cpw < 7 ? 'Conversational' : 'Technical';
+      }
+      $('stat-score').textContent = score;
+      STATE.scriptData.content = text;
+      saveState();
+    }
+
+    
+    async function generateScript() {
+      $('script-result').classList.add('hidden');
+      $('script-skeleton').classList.remove('hidden');
+      $('btn-generate-script').disabled = true;
+      $('btn-generate-script').innerHTML = '<span class="spinner"></span> Menulis...';
+
+      const title = $('script-title-input').value.trim() || STATE.selectedIdea?.title || STATE.topic || 'Custom Manual Script';
+      const brief = $('script-brief-input').value.trim() || STATE.selectedIdea?.angle || 'Sudut pandang umum';
+      const category = STATE.category ? `${STATE.category.main} - ${STATE.category.sub}` : 'General / Bebas';
+      const cfg = DURATION_MAP[STATE.scriptSettings.durationIndex];
+      const words = Math.round(cfg.min * 140);
+      const s = STATE.scriptSettings;
+      const language = STATE.audience === 'id' ? 'id' : 'en';
+      const researchQuery = [STATE.topic, title, brief, STATE.category?.sub, STATE.category?.main].filter(Boolean).join(' ');
+
+      let research = null;
+      try {
+        research = await fetchInternetResearch(researchQuery, language);
+        STATE.research = research;
+      } catch (err) {
+        console.warn('Research fetch failed, using fallback.', err);
+      }
+
+      const facts = (research?.facts || []).slice(0, 5);
+      const factBlock = facts.length
+        ? facts.map((f, i) => `- Fakta ${i + 1}: ${f}`).join('\n')
+        : '- Data internet belum tersedia, gunakan sudut pandang umum dan tambahkan riset manual.';
+
+      const sourceBlock = (research?.sources || []).slice(0, 3).map((src, i) => `${i + 1}. ${src.title} — ${src.url}`).join('\n');
+
+      const script = `# ${title}
+
+**Target Audience:** ${STATE.audience === 'id' ? 'Bahasa Indonesia' : 'English'}
+**Category:** ${category}
+**Brief:** ${brief}
+**Duration Target:** ${cfg.label} (${cfg.type})
+**Est. Word Count:** ~${words} kata
+
+---
+
+## HOOK
+${research?.hook || `Kamu mungkin belum sadar, tapi ${title} punya sisi yang sangat menarik.`}
+
+## DATA INTERNET
+${factBlock}
+
+## INTRO
+Pembahasan ini dibuat supaya penonton langsung paham dari awal, tanpa perlu konteks yang terlalu rumit.
+
+## BODY
+### BAB 1
+Mulai dari penjelasan dasar yang gampang dicerna, lalu kaitkan dengan data yang paling relevan di atas.
+
+### BAB 2
+Masuk ke bagian inti, tambahkan contoh, data, atau cerita yang relevan. Gunakan gaya ${s.narrationStyle.toLowerCase()} dan tone ${s.emotion.toLowerCase()}.
+
+### BAB 3
+Tutup dengan insight paling penting dan transisi yang kuat ke akhir video.
+
+## PAYOFF
+Intinya, ${title} bukan cuma topik biasa. Ada detail penting yang sering dilewatkan.
+
+## CTA
+Kalau kamu suka format seperti ini, like, subscribe, dan tulis topik berikutnya di komentar.
+
+## SOURCES
+${sourceBlock || '- Sumber belum tersedia'}`;
+
+      $('script-output').value = script;
+      $('script-result').classList.remove('hidden');
+      $('script-skeleton').classList.add('hidden');
+      $('btn-generate-script').disabled = false;
+      $('btn-generate-script').innerHTML = '<i data-lucide="pen-tool" class="w-5 h-5"></i> Tulis Script';
+      updateScriptStats();
+      STATE.customScriptTitle = $('script-title-input').value.trim();
+      STATE.customScriptBrief = $('script-brief-input').value.trim();
+      STATE.scriptData.content = script;
+      markChecklist('c2', true);
+      saveState();
+      lucide.createIcons();
+      toast(research ? 'Script dibuat dengan data internet.' : 'Script berhasil dibuat.', 'success');
+    }
+
+    function buildVoiceoverText
+    function buildVoiceoverText(baseText, ssmlMode='light') {
+      const paragraphs = baseText.split(/\n{2,}/).map(s => s.trim()).filter(Boolean);
+      const pauses = { light: ' [pause 0.6s] ', medium: ' [pause 1s] ', heavy: ' [pause 1.5s] ' }[ssmlMode] || ' [pause 0.6s] ';
+      return paragraphs.map(p => {
+        if (p.startsWith('#')) return `<prosody rate="95%" volume="+1dB">${p.replace(/^#\s*/,'')}</prosody>`;
+        if (p.startsWith('**')) return `<prosody rate="92%" emphasis="strong">${p.replace(/\*\*/g,'')}</prosody>`;
+        return p.replace(/([.!?])\s+/g, `$1${pauses}`);
+      }).join('\n\n');
+    }
+
+    
+    async function generateVoiceover() {
+      if (!STATE.scriptData.content && !$('vo-input').value.trim()) return toast('Buat script dulu atau isi teks manual.', 'error');
+
+      const source = $('vo-source').value;
+      const platform = $('vo-platform').value;
+      const persona = $('vo-persona-input').value.trim() || 'Natural, engaging';
+      const emotion = $('vo-emotion').value;
+      const speed = $('vo-speed').value;
+      const ssml = $('vo-ssml').value;
+
+      const text = source === 'script' ? $('script-output').value : $('vo-input').value;
+      const clean = text.trim() || $('vo-input').value.trim();
+      if (!clean) return toast('Teks voiceover masih kosong.', 'error');
+
+      $('vo-result').classList.remove('hidden');
+      $('btn-download-vo').textContent = 'MP3';
+
+      const params = {
+        stability: platform === 'elevenlabs' ? (emotion === 'Serious' ? '68%' : emotion === 'Suspense' ? '42%' : emotion === 'Calm' ? '72%' : '55%') : 'N/A',
+        similarity: platform === 'elevenlabs' ? '78%' : 'N/A',
+        style: platform === 'elevenlabs' ? (speed === 'Fast' ? '18%' : speed === 'Slow' ? '10%' : '14%') : 'N/A',
+        boost: platform === 'elevenlabs' ? 'On' : 'Off'
+      };
+
+      const tipsMap = {
+        Excited: 'Naikkan intonasi di hook, lalu turunkan sedikit di bagian penjelasan.',
+        Calm: 'Bicara santai, jeda lebih rapih, jangan terlalu meledak di hook.',
+        Serious: 'Tekankan kata kunci, pakai tempo stabil, dan beri jeda tegas.',
+        Suspense: 'Buka dengan rendah, lalu naikkan tensi sedikit demi sedikit.',
+        Inspirational: 'Berikan aksen hangat dan optimistis di bagian payoff.'
+      };
+
+      const formatted = buildVoiceoverText(clean, ssml);
+      $('vo-output').value = formatted;
+      $('vo-persona-view').textContent = persona;
+      $('vo-tips').textContent = tipsMap[emotion] || 'Gunakan intonasi natural dan konsisten.';
+      $('vo-stability').textContent = params.stability;
+      $('vo-similarity').textContent = params.similarity;
+      $('vo-style').textContent = params.style;
+      $('vo-boost').textContent = params.boost;
+
+      STATE.voiceover = { content: formatted, persona, params, platform, emotion, speed, ssml, audioUrl: '', mimeType: 'audio/mpeg' };
+
+      try {
+        const res = await fetch('/api/voiceover', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: clean,
+            persona,
+            emotion,
+            speed,
+            platform,
+            ssml,
+            title: STATE.customScriptTitle || STATE.selectedIdea?.title || STATE.topic || 'voiceover'
+          })
+        });
+
+        if (!res.ok) throw new Error(await res.text());
+        const blob = await res.blob();
+        const audioUrl = URL.createObjectURL(blob);
+        STATE.voiceover.audioUrl = audioUrl;
+        STATE.voiceover.mimeType = blob.type || 'audio/mpeg';
+        toast('Voiceover MP3 siap diunduh.', 'success');
+      } catch (err) {
+        console.warn(err);
+        STATE.voiceover.audioUrl = '';
+        toast('Voiceover teks siap, MP3 butuh API key di Cloudflare.', 'error');
+      }
+
+      saveState();
+      markChecklist('c3', true);
+      if (STATE.voiceover.audioUrl) $('btn-download-vo').textContent = 'MP3';
+    }
+
+    function generateThumbnailIdeas
+    
+    function generateThumbnailIdeas() {
+      const baseTitle = $('thumb-brief-input').value.trim() || STATE.selectedIdea?.title || $('script-title-input').value.trim() || STATE.topic || 'Ide Konten';
+      const style = $('thumb-style-input').value.trim() || STATE.category?.tone || 'cinematic, high contrast, bold text';
+      $('thumb-results').classList.add('hidden');
+      $('thumb-skeleton').classList.remove('hidden');
+
+      setTimeout(() => {
+        const ideas = [
+          { overlay: 'WOW!', prompt: `${baseTitle} dramatic composition, shocked face, bold contrast, cinematic lighting, ${style}`, angle: 'Close-up', light: 'Cinematic', lens: '50mm', palette: 'Red, black, white' },
+          { overlay: 'RAHASIA', prompt: `${baseTitle} investigative thumbnail, split-screen, highlight important object, high contrast, ${style}`, angle: 'Medium shot', light: 'Neon', lens: '35mm', palette: 'Yellow, black, cyan' },
+          { overlay: '3 FAKTA', prompt: `${baseTitle} listicle thumbnail, big number text, dynamic layout, modern YouTube style, ${style}`, angle: 'Wide', light: 'Bright', lens: '24mm', palette: 'Blue, white, red' }
+        ];
+
+        const htmlCards = ideas.map((t, i) => {
+          const png = createThumbnailDataURL(t, baseTitle, style, i);
+          return `
+            <div class="glass rounded-3xl overflow-hidden border border-gray-200 dark:border-[#3a3a3a]">
+              <div class="p-4 md:p-5 border-b dark:border-[#3a3a3a] border-gray-200 dark:bg-[#1a1a1a] bg-gray-100 flex items-center justify-between gap-3">
+                <div class="font-extrabold">Konsep ${i+1}</div>
+                <div class="text-xs px-2 py-1 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20">${t.overlay}</div>
+              </div>
+              <div class="p-5 grid md:grid-cols-2 gap-4 text-sm">
+                <div class="space-y-3">
+                  <div><div class="text-xs text-gray-500 mb-1">Preview PNG</div><img src="${png}" alt="thumbnail preview" class="w-full rounded-2xl border border-gray-200 dark:border-[#3a3a3a]"></div>
+                  <div class="flex gap-2 flex-wrap">
+                    <button class="thumb-download px-3 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold" data-png="${png}" data-name="thumbnail-${i+1}.png">Download PNG</button>
+                    <button class="thumb-copy px-3 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#222] text-xs font-semibold" data-prompt="${t.prompt}">Copy Prompt</button>
+                  </div>
+                </div>
+                <div class="space-y-3">
+                  <div><div class="text-xs text-gray-500">AI Prompt</div><div class="rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-200 dark:bg-[#111] bg-gray-50 font-mono text-xs">${t.prompt}</div></div>
+                  <div><div class="text-xs text-gray-500">Camera Angle</div><div class="font-semibold">${t.angle}</div></div>
+                  <div><div class="text-xs text-gray-500">Lighting</div><div class="font-semibold">${t.light}</div></div>
+                  <div><div class="text-xs text-gray-500">Lens</div><div class="font-semibold">${t.lens}</div></div>
+                  <div><div class="text-xs text-gray-500">Color Palette</div><div class="font-semibold">${t.palette}</div></div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        $('thumb-results').innerHTML = htmlCards;
+        $('thumb-results').classList.remove('hidden');
+        $('thumb-skeleton').classList.add('hidden');
+
+        document.querySelectorAll('.thumb-download').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const png = btn.dataset.png;
+            const name = btn.dataset.name || 'thumbnail.png';
+            const a = document.createElement('a');
+            a.href = png;
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          });
+        });
+
+        document.querySelectorAll('.thumb-copy').forEach(btn => {
+          btn.addEventListener('click', () => copyToClipboard(btn.dataset.prompt || ''));
+        });
+
+        STATE.thumbnailBrief = $('thumb-brief-input').value.trim();
+        STATE.thumbnailStyle = $('thumb-style-input').value.trim();
+        STATE.thumbnails = ideas;
+        markChecklist('c4', true);
+        saveState();
+        lucide.createIcons();
+      }, 500);
+    }
+
+    function generateSEO
+    
+    async function generateSEO() {
+      const base = $('seo-brief-input').value.trim() || STATE.selectedIdea?.title || $('script-title-input').value.trim() || STATE.topic || 'Konten Ini';
+      const country = $('seo-country-input').value || (STATE.audience === 'id' ? 'Indonesia' : 'Global');
+      $('seo-results').classList.add('hidden');
+
+      let research = null;
+      try {
+        research = await fetchInternetResearch([base, STATE.topic, STATE.category?.sub].filter(Boolean).join(' '), STATE.audience);
+        STATE.research = research;
+      } catch (err) {
+        console.warn('SEO research failed', err);
+      }
+
+      setTimeout(() => {
+        const kw = base.toLowerCase();
+        const facts = (research?.facts || []).slice(0, 3);
+        const titles = [
+          `${base} | Penjelasan Lengkap dan Mudah Dipahami`,
+          `Kenapa ${base}? Ini Jawaban yang Jarang Dibahas`,
+          `Fakta Mengejutkan tentang ${base} yang Wajib Kamu Tahu`,
+          `${base}: Versi Singkat, Padat, dan Jelas`,
+          `Apa yang Sebenarnya Terjadi di Balik ${base}?`
+        ];
+
+        const data = {
+          primary: research?.primaryKeyword || kw,
+          secondary: research?.secondaryKeyword || `${kw} indonesia`,
+          intent: STATE.category?.main === 'Bisnis & Finansial' ? 'Informational / Transactional' : 'Informational / Entertaining',
+          ctr: research?.ctrScore || '8.5/10',
+          country: country,
+          upload: '19:00 - 21:00 local time',
+          density: '1.0% - 1.5%',
+          tags: `${kw}, ${kw} indonesia, ${kw} terbaru, ${base.toLowerCase()}, youtube ${kw.replace(/[^a-z0-9 ]/g,'').trim()}`,
+          hashtags: `#${kw.replace(/\s+/g,'')} #youtube #viral`,
+          desc: `Di video ini kita bahas ${base} secara singkat, jelas, dan mudah dipahami.\n\nPoint utama:\n${facts.length ? facts.map(f => `- ${f}`).join('\n') : '- Penjelasan inti\n- Fakta penting\n- Kesimpulan'}\n\nKalau suka konten seperti ini, jangan lupa like, subscribe, dan komen topik selanjutnya.\n\n#${kw.replace(/\s+/g,'')}`
+        };
+        $('seo-primary').textContent = data.primary;
+        $('seo-secondary').textContent = data.secondary;
+        $('seo-intent').textContent = data.intent;
+        $('seo-ctr').textContent = data.ctr;
+        $('seo-country').textContent = data.country;
+        $('seo-upload').textContent = data.upload;
+        $('seo-density').textContent = data.density;
+        $('seo-tags').value = data.tags;
+        $('seo-hashtags').textContent = data.hashtags;
+        $('seo-desc').value = data.desc;
+        $('seo-titles').innerHTML = titles.map(t => `<div class="rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-200 hover:bg-gray-50 dark:hover:bg-[#2a2a2a] cursor-pointer">${t}</div>`).join('');
+        $('seo-results').classList.remove('hidden');
+        STATE.seoBrief = $('seo-brief-input').value.trim();
+        STATE.seoCountry = country;
+        STATE.seo = { ...data, titles };
+        markChecklist('c5', true);
+        markChecklist('c6', true);
+        saveState();
+        toast(research ? 'SEO dibuat dengan data internet.' : 'SEO berhasil dibuat.', 'success');
+      }, 500);
+    }
+
+    function initChecklist
+    function initChecklist() {
+      const container = $('checklist-container');
+      container.innerHTML = '';
+      CHECKLIST_ITEMS.forEach(item => {
+        const checked = !!STATE.checklist[item.id];
+        const row = document.createElement('label');
+        row.className = 'flex items-start gap-3 p-3 rounded-2xl hover:bg-gray-100 dark:hover:bg-[#2a2a2a] cursor-pointer';
+        row.innerHTML = `
+          <input type="checkbox" class="mt-1 w-4 h-4 accent-red-600" ${checked ? 'checked' : ''}>
+          <span class="text-sm ${checked ? 'line-through opacity-50' : ''}">${item.label}</span>
+        `;
+        const input = row.querySelector('input');
+        const span = row.querySelector('span');
+        input.addEventListener('change', (e) => {
+          STATE.checklist[item.id] = e.target.checked;
+          span.classList.toggle('line-through', e.target.checked);
+          span.classList.toggle('opacity-50', e.target.checked);
+          updateChecklistProgress();
+          saveState();
+        });
+        container.appendChild(row);
+      });
+      updateChecklistProgress();
+    }
+
+    function markChecklist(id, value) {
+      STATE.checklist[id] = value;
+      const idx = CHECKLIST_ITEMS.findIndex(x => x.id === id);
+      const row = $('checklist-container').children[idx];
+      if (row) {
+        const input = row.querySelector('input');
+        const span = row.querySelector('span');
+        input.checked = value;
+        span.classList.toggle('line-through', value);
+        span.classList.toggle('opacity-50', value);
+      }
+      updateChecklistProgress();
+    }
+
+    function updateChecklistProgress() {
+      const total = CHECKLIST_ITEMS.length;
+      const checked = Object.values(STATE.checklist).filter(Boolean).length;
+      const pct = total ? Math.round((checked / total) * 100) : 0;
+      $('check-progress').textContent = pct + '%';
+      const circ = 2 * Math.PI * 46;
+      $('check-circle').style.strokeDashoffset = circ - (pct / 100) * circ;
+    }
+
+    function updatePrereqState() {
+      // Semua section dibuat mandiri: form selalu aktif, warning hanya sebagai tips.
+      ['script', 'vo', 'thumb', 'seo'].forEach(prefix => {
+        document.getElementById(`${prefix}-warning`)?.classList.add('hidden');
+        const form = document.getElementById(`${prefix}-form`);
+        form?.classList.remove('opacity-50', 'pointer-events-none');
+      });
+
+      $('script-audience').textContent = STATE.audience === 'id' ? 'Indonesia' : 'International';
+      $('script-idea').textContent = STATE.selectedIdea?.title || $('script-title-input')?.value || $('script-brief-input')?.value || 'Custom Manual Script';
+    }
+
+    function exportState(type='json') {
+      const data = JSON.stringify({ ...STATE, lastUpdated: new Date().toISOString() }, null, 2);
+      const txt = [
+        `TITLE: ${STATE.selectedIdea?.title || 'Untitled'}`,
+        `CATEGORY: ${STATE.category?.main || '-'} > ${STATE.category?.sub || '-'}`,
+        '',
+        'SCRIPT:',
+        STATE.scriptData.content || '',
+        '',
+        'VOICEOVER:',
+        STATE.voiceover.content || '',
+        '',
+        'SEO:',
+        STATE.seo ? JSON.stringify(STATE.seo, null, 2) : ''
+      ].join('\n');
+      const md = `# ${STATE.selectedIdea?.title || 'Untitled'}\n\n## Category\n${STATE.category?.main || '-'} > ${STATE.category?.sub || '-'}\n\n## Script\n\n${STATE.scriptData.content || '-'}\n\n## Voiceover\n\n${STATE.voiceover.content || '-'}\n\n## SEO\n\n\`\`\`json\n${STATE.seo ? JSON.stringify(STATE.seo, null, 2) : '{}'}\n\`\`\`\n`;
+      const blob = new Blob([type === 'json' ? data : type === 'md' ? md : txt], { type: type === 'json' ? 'application/json' : 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `YT_Project.${type === 'json' ? 'json' : type === 'md' ? 'md' : 'txt'}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importState(file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(reader.result);
+          Object.assign(STATE, parsed);
+          applyTheme();
+          renderAllFromState();
+          saveState();
+          toast('Project berhasil di-import.', 'success');
+        } catch {
+          toast('File JSON tidak valid.', 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function renderAllFromState() {
+      updateAudienceUI();
+      renderCategories($('category-search').value || '');
+      if (STATE.topic) $('topic-input').value = STATE.topic;
+      if (STATE.selectedIdea) {
+        renderIdeas([STATE.selectedIdea]);
+        $('ideas-results').classList.remove('hidden');
+      }
+      $('script-title-input').value = STATE.customScriptTitle || '';
+      $('script-brief-input').value = STATE.customScriptBrief || '';
+      $('thumb-brief-input').value = STATE.thumbnailBrief || '';
+      $('thumb-style-input').value = STATE.thumbnailStyle || '';
+      $('seo-brief-input').value = STATE.seoBrief || '';
+      $('seo-country-input').value = STATE.seoCountry || (STATE.audience === 'id' ? 'Indonesia' : 'Global');
+
+      $('duration-slider').value = STATE.scriptSettings.durationIndex;
+      updateDurationDisplay(STATE.scriptSettings.durationIndex);
+      $('set-age').value = STATE.scriptSettings.age;
+      $('set-exp').value = STATE.scriptSettings.experience;
+      $('set-style').value = STATE.scriptSettings.narrationStyle;
+      $('set-hook').value = STATE.scriptSettings.hookStyle;
+      $('set-cta').value = STATE.scriptSettings.ctaStyle;
+      $('set-detail').value = STATE.scriptSettings.detailLevel;
+      $('set-speed').value = STATE.scriptSettings.speakingSpeed;
+      $('set-emotion').value = STATE.scriptSettings.emotion;
+
+      $('script-output').value = STATE.scriptData.content || '';
+      if (STATE.scriptData.content) {
+        $('script-result').classList.remove('hidden');
+        updateScriptStats();
+      }
+
+      if (STATE.voiceover?.content) {
+        $('vo-output').value = STATE.voiceover.content;
+        $('vo-persona-view').textContent = STATE.voiceover.persona || '-';
+        $('vo-tips').textContent = STATE.voiceover.audioUrl ? 'Voiceover MP3 siap diunduh.' : 'Sesi voiceover tersimpan.';
+        $('vo-stability').textContent = STATE.voiceover.params?.stability || '—';
+        $('vo-similarity').textContent = STATE.voiceover.params?.similarity || '—';
+        $('vo-style').textContent = STATE.voiceover.params?.style || '—';
+        $('vo-boost').textContent = STATE.voiceover.params?.boost || '—';
+        $('btn-download-vo').textContent = STATE.voiceover.audioUrl ? 'MP3' : 'TXT';
+        $('vo-result').classList.remove('hidden');
+      }
+
+      if (STATE.seo) {
+        $('seo-primary').textContent = STATE.seo.primary || STATE.seo.primary_keyword || '-';
+      }
+
+      initChecklist();
+      updateBadges();
+      updatePrereqState();
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => toast('Disalin ke clipboard.', 'success')).catch(() => toast('Gagal menyalin.', 'error'));
+    }
+    async function fetchInternetResearch(query, lang = 'id') {
+      const safeQuery = (query || '').trim();
+      if (!safeQuery) throw new Error('Query kosong');
+
+      const body = JSON.stringify({ query: safeQuery, lang });
+      const resp = await fetch('/api/research', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body
+      });
+      if (!resp.ok) throw new Error(await resp.text());
+      return await resp.json();
+    }
+
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function wrapText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 99) {
+      const words = String(text || '').split(/\s+/);
+      let line = '';
+      let lines = 0;
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && n > 0) {
+          ctx.fillText(line.trim(), x, y);
+          line = words[n] + ' ';
+          y += lineHeight;
+          lines++;
+          if (lines >= maxLines - 1) break;
+        } else {
+          line = testLine;
+        }
+      }
+      if (lines < maxLines) ctx.fillText(line.trim(), x, y);
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      const radius = Math.min(r, w / 2, h / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.arcTo(x + w, y, x + w, y + h, radius);
+      ctx.arcTo(x + w, y + h, x, y + h, radius);
+      ctx.arcTo(x, y + h, x, y, radius);
+      ctx.arcTo(x, y, x + w, y, radius);
+      ctx.closePath();
+      return ctx;
+    }
+
+    function createThumbnailDataURL(concept, title, style, idx) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1280;
+      canvas.height = 720;
+      const ctx = canvas.getContext('2d');
+
+      const colors = [
+        ['#111111', '#ef4444'],
+        ['#1e3a8a', '#06b6d4'],
+        ['#4c1d95', '#f59e0b']
+      ];
+      const [bg1, bg2] = colors[idx % colors.length];
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, bg1);
+      gradient.addColorStop(1, '#000000');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = bg2 + 'cc';
+      ctx.beginPath();
+      ctx.arc(1040, 160, 180, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff22';
+      ctx.beginPath();
+      ctx.arc(220, 560, 220, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = 'rgba(0,0,0,0.45)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 78px Impact, Arial Black, sans-serif';
+      ctx.textBaseline = 'top';
+      ctx.fillText(concept.overlay || 'WOW!', 60, 60);
+
+      ctx.font = '700 38px Inter, Arial, sans-serif';
+      ctx.fillStyle = '#ffffffcc';
+      wrapText(ctx, title, 60, 175, 790, 46, 4);
+
+      ctx.fillStyle = 'rgba(255,255,255,0.1)';
+      ctx.strokeStyle = '#ffffff33';
+      ctx.lineWidth = 2;
+      roundRect(ctx, 900, 430, 320, 220, 28);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#fff';
+      ctx.font = '700 28px Inter, Arial, sans-serif';
+      ctx.fillText('STYLE', 930, 455);
+      ctx.font = '600 24px Inter, Arial, sans-serif';
+      wrapText(ctx, style, 930, 500, 250, 30, 4);
+
+      ctx.font = '600 22px Inter, Arial, sans-serif';
+      ctx.fillStyle = '#ffffffdd';
+      ctx.fillText(concept.angle || '', 60, 560);
+      ctx.fillStyle = '#ffffff99';
+      ctx.font = '500 18px Inter, Arial, sans-serif';
+      ctx.fillText((concept.light || '') + ' • ' + (concept.lens || ''), 60, 605);
+
+      ctx.fillStyle = '#ffffffee';
+      ctx.font = '800 24px Inter, Arial, sans-serif';
+      ctx.fillText('CreatorSuite', 60, 660);
+
+      return canvas.toDataURL('image/png');
+    }
+
+
+    function setupListeners() {
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+          btn.classList.add('active');
+          document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+          $('section-' + btn.dataset.target).classList.add('active');
+          $('main-scroll').scrollTop = 0;
+        });
+      });
+
+      $('mobile-menu-btn').addEventListener('click', () => {
+        document.querySelector('aside').classList.toggle('hidden');
+      });
+
+      $('btn-theme').addEventListener('click', () => setTheme(STATE.theme === 'dark' ? 'light' : 'dark'));
+      $('toggle-id').addEventListener('click', () => { STATE.audience = 'id'; updateAudienceUI(); saveState(); });
+      $('toggle-intl').addEventListener('click', () => { STATE.audience = 'intl'; updateAudienceUI(); saveState(); });
+
+      $('category-search').addEventListener('input', e => renderCategories(e.target.value));
+      $('btn-generate-ideas').addEventListener('click', generateIdeas);
+      $('btn-generate-script').addEventListener('click', generateScript);
+      $('duration-slider').addEventListener('input', e => { STATE.scriptSettings.durationIndex = parseInt(e.target.value); updateDurationDisplay(STATE.scriptSettings.durationIndex); saveState(); });
+      $('script-output').addEventListener('input', updateScriptStats);
+
+      ['script-title-input','script-brief-input','thumb-brief-input','thumb-style-input','seo-brief-input','seo-country-input'].forEach(id => {
+        $(id).addEventListener('input', () => {
+          STATE.customScriptTitle = $('script-title-input').value.trim();
+          STATE.customScriptBrief = $('script-brief-input').value.trim();
+          STATE.thumbnailBrief = $('thumb-brief-input').value.trim();
+          STATE.thumbnailStyle = $('thumb-style-input').value.trim();
+          STATE.seoBrief = $('seo-brief-input').value.trim();
+          STATE.seoCountry = $('seo-country-input').value;
+          saveState();
+        });
+      });
+
+      ['set-age','set-exp','set-style','set-hook','set-cta','set-detail','set-speed','set-emotion'].forEach(id => {
+        $(id).addEventListener('change', e => {
+          const map = {
+            'set-age':'age','set-exp':'experience','set-style':'narrationStyle','set-hook':'hookStyle',
+            'set-cta':'ctaStyle','set-detail':'detailLevel','set-speed':'speakingSpeed','set-emotion':'emotion'
+          };
+          STATE.scriptSettings[map[id]] = e.target.value;
+          saveState();
+        });
+      });
+
+      $('btn-vo-from-script').addEventListener('click', () => {
+        $('vo-input').value = $('script-output').value || '';
+        $('vo-source').value = 'script';
+        toast('Script dipindahkan ke voiceover.', 'success');
+      });
+      $('btn-generate-vo').addEventListener('click', generateVoiceover);
+
+      $('btn-generate-thumb').addEventListener('click', generateThumbnailIdeas);
+      $('btn-generate-seo').addEventListener('click', generateSEO);
+
+      document.querySelectorAll('.btn-copy').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = $(btn.dataset.targetId);
+          const text = target ? (target.value || target.innerText || '') : '';
+          copyToClipboard(text);
+        });
+      });
+
+      $('btn-download-script').addEventListener('click', () => {
+        const blob = new Blob([$('script-output').value || ''], { type: 'text/plain' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'script.txt'; a.click();
+      });
+      $('btn-download-vo').addEventListener('click', async () => {
+        if (STATE.voiceover?.audioUrl) {
+          const res = await fetch(STATE.voiceover.audioUrl);
+          const blob = await res.blob();
+          downloadBlob(blob, 'voiceover.mp3');
+          return;
+        }
+        const blob = new Blob([$('vo-output').value || ''], { type: 'text/plain' });
+        downloadBlob(blob, 'voiceover.txt');
+      });
+
+      $('btn-save-modal').addEventListener('click', () => $('save-modal').classList.remove('hidden'));
+      $('btn-close-modal').addEventListener('click', () => $('save-modal').classList.add('hidden'));
+      $('btn-export-json').addEventListener('click', () => exportState('json'));
+      $('btn-export-txt').addEventListener('click', () => exportState('txt'));
+      $('btn-export-md').addEventListener('click', () => exportState('md'));
+      $('btn-trigger-import').addEventListener('click', () => $('file-import').click());
+      $('file-import').addEventListener('change', e => e.target.files[0] && importState(e.target.files[0]));
+
+      $('btn-reset').addEventListener('click', () => {
+        if (!confirm('Reset semua data sesi?')) return;
+        localStorage.removeItem('ytSuiteStateV3');
+        location.reload();
+      });
+
+      $('btn-restore').addEventListener('click', () => {
+        $('restore-bar').classList.add('hidden');
+        renderAllFromState();
+        toast('Sesi dipulihkan.', 'success');
+      });
+      $('btn-discard').addEventListener('click', () => {
+        localStorage.removeItem('ytSuiteStateV3');
+        $('restore-bar').classList.add('hidden');
+      });
+
+      $('topic-input').addEventListener('keypress', e => { if (e.key === 'Enter') generateIdeas(); });
+
+      document.addEventListener('keydown', e => {
+        if (e.ctrlKey && e.key.toLowerCase() === 's') { e.preventDefault(); $('save-modal').classList.remove('hidden'); }
+        if (e.ctrlKey && e.key === 'Enter') {
+          e.preventDefault();
+          const active = document.querySelector('.section-content.active');
+          const btn = active?.querySelector('button[id^="btn-generate"]');
+          if (btn) btn.click();
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('ytSuiteTheme');
+      if (savedTheme) STATE.theme = savedTheme;
+      applyTheme();
+
+      const restored = loadState();
+      if (restored) $('restore-bar').classList.remove('hidden');
+
+      initChecklist();
+      renderCategories();
+      updateAudienceUI();
+      updateDurationDisplay(STATE.scriptSettings.durationIndex);
+      updatePrereqState();
+      setupListeners();
+      renderAllFromState();
+
+      // Seed script area if state has selected idea and script is empty? No auto-generate.
+      if (STATE.selectedIdea) updateBadges();
+      lucide.createIcons();
+    });
+  </script>
+
+</body>
+</html>

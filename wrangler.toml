@@ -1,0 +1,6 @@
+name = "creator-suite-pro"
+compatibility_date = "2026-07-20"
+
+[vars]
+OPENAI_TTS_MODEL = "gpt-4o-mini-tts"
+OPENAI_IMAGE_MODEL = "gpt-image-1"
