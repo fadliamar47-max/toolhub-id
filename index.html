@@ -156,7 +156,7 @@
             appState.category = val;
         }
 
-        // PENGHUBUNG UTAMA KE CLOUDFLARE WORKER ANDA
+        // PENGHUBUNG AMAN KE CLOUDFLARE WORKER
         async function callGemini(promptText) {
             const workerUrl = "https://blue-mouse-c220.fadliamar47.workers.dev";
             const response = await fetch(workerUrl, {
@@ -170,7 +170,18 @@
             }
 
             const data = await response.json();
-            return data.candidates[0].content.parts[0].text;
+            
+            if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+                return data.candidates[0].content.parts[0].text;
+            } else if (data.text) {
+                return data.text;
+            } else if (data.output) {
+                return data.output;
+            } else if (typeof data === 'string') {
+                return data;
+            } else {
+                throw new Error('Format balasan dari server tidak valid.');
+            }
         }
 
         async function generateIdeasAI() {
