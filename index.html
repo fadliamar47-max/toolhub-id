@@ -1,1311 +1,304 @@
-<!doctype html>
-<html lang="id" class="dark">
+<!DOCTYPE html>
+<html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ToolHub ID | AI Content Studio</title>
-  <meta name="description" content="ToolHub ID adalah studio konten AI untuk script, thumbnail, voiceover, dan SEO YouTube." />
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0f0f0f" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToolHub ID V2.0 - YouTube Content OS</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <style>
-    :root { color-scheme: dark; }
-    html.light { color-scheme: light; }
-    body { font-family: Inter, sans-serif; transition: background-color .25s ease, color .25s ease; }
-    .dark body { background:#0f0f0f; color:#f3f4f6; }
-    body:not(.dark) { background:#f8fafc; color:#111827; }
-
-    .glass { background: rgba(255,255,255,.92); backdrop-filter: blur(12px); border:1px solid rgba(0,0,0,.08); box-shadow:0 10px 30px rgba(0,0,0,.06); }
-    .dark .glass { background: rgba(32,32,32,.82); border:1px solid rgba(255,255,255,.08); box-shadow:0 10px 30px rgba(0,0,0,.24); }
-
-    .section { display:none; animation: fade .22s ease; }
-    .section.active { display:block; }
-    @keyframes fade { from {opacity:0; transform: translateY(8px);} to {opacity:1; transform: translateY(0);} }
-
-    .nav-item.active { border-left:4px solid #ff0000; background: rgba(255,0,0,.08); font-weight:700; }
-    .card-hover { transition: transform .18s ease, border-color .18s ease, background-color .18s ease; }
-    .card-hover:hover { transform: translateY(-2px); }
-
-    .spinner { width:18px; height:18px; border-radius:999px; border:3px solid rgba(255,255,255,.2); border-top-color:#fff; animation:spin 1s linear infinite; }
-    @keyframes spin { to{ transform: rotate(360deg);} }
-
-    .skeleton {
-      background: linear-gradient(90deg, #e5e7eb 25%, #d1d5db 50%, #e5e7eb 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.4s infinite;
-    }
-    .dark .skeleton {
-      background: linear-gradient(90deg, #262626 25%, #3a3a3a 50%, #262626 75%);
-      background-size: 200% 100%;
-    }
-    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-
-    input, textarea, select { outline:none; }
-    ::-webkit-scrollbar { width: 8px; height: 8px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    .dark ::-webkit-scrollbar-thumb { background:#444; border-radius:999px; }
-    ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:999px; }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="min-h-screen overflow-hidden">
-  <div class="flex h-screen">
-    <aside class="hidden md:flex w-72 shrink-0 flex-col border-r dark:border-[#2a2a2a] border-gray-200 dark:bg-yt-black bg-white">
-      <div class="p-5 flex items-center gap-3 border-b dark:border-[#2a2a2a] border-gray-200">
-        <div class="w-10 h-10 rounded-2xl bg-red-600/15 flex items-center justify-center">
-          <i data-lucide="sparkles" class="w-5 h-5 text-red-500"></i>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col">
+  <div class="flex h-screen overflow-hidden">
+    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between hidden md:flex">
+      <div class="p-5">
+        <div class="flex items-center space-x-3 mb-8">
+          <div class="bg-indigo-600 p-2 rounded-lg text-white font-bold"><i class="fa-solid fa-bolt"></i></div>
+          <div>
+            <div class="font-bold text-lg leading-tight">Creator<span class="text-indigo-400">Suite</span></div>
+            <div class="text-xs text-slate-400">YouTube Content OS</div>
+          </div>
         </div>
-        <div>
-          <div class="font-extrabold text-lg leading-none">ToolHub<span class="text-red-500">ID</span></div>
-          <div class="text-xs text-gray-500 dark:text-gray-400">AI Content Studio</div>
-        </div>
+        <nav class="space-y-1">
+          <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 px-3">Preparation</div>
+          <button onclick="switchTab('dashboard')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn bg-indigo-600 text-white" data-target="dashboard">
+            <i class="fa-solid fa-house w-5"></i> <span>Dashboard</span>
+          </button>
+          <button onclick="switchTab('category')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800 hover:text-white" data-target="category">
+            <i class="fa-solid fa-layer-group w-5"></i> <span>Kategori Konten</span>
+          </button>
+          <button onclick="switchTab('ideation')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800 hover:text-white" data-target="ideation">
+            <i class="fa-solid fa-lightbulb w-5"></i> <span>Content Ideation</span>
+          </button>
+          <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-6 mb-2 px-3">Production</div>
+          <button onclick="switchTab('script')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800 hover:text-white" data-target="script">
+            <i class="fa-solid fa-file-pen w-5"></i> <span>Script Generator</span>
+          </button>
+          <button onclick="switchTab('voiceover')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800 hover:text-white" data-target="voiceover">
+            <i class="fa-solid fa-microphone w-5"></i> <span>Voiceover</span>
+          </button>
+          <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-6 mb-2 px-3">Packaging</div>
+          <button onclick="switchTab('thumbnail')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800 hover:text-white" data-target="thumbnail">
+            <i class="fa-solid fa-image w-5"></i> <span>Thumbnail Ideas</span>
+          </button>
+          <button onclick="switchTab('seo')" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition nav-btn text-slate-400 hover:bg-slate-800 hover:text-white" data-target="seo">
+            <i class="fa-solid fa-chart-line w-5"></i> <span>Title & SEO</span>
+          </button>
+        </nav>
       </div>
-
-      <nav class="p-3 flex-1 overflow-y-auto" id="sidebar">
-        <div class="px-3 mt-2 mb-2 text-[11px] uppercase tracking-[.2em] text-gray-500 dark:text-gray-400">Main</div>
-        <button class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] active" data-target="dashboard">
-          <i data-lucide="layout-grid" class="w-4 h-4 text-cyan-400"></i> Dashboard
-        </button>
-        <div class="px-3 mt-6 mb-2 text-[11px] uppercase tracking-[.2em] text-gray-500 dark:text-gray-400">Production</div>
-        <button class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]" data-target="script">
-          <i data-lucide="file-text" class="w-4 h-4 text-red-500"></i> AI Script
-        </button>
-        <button class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]" data-target="thumbnail">
-          <i data-lucide="image" class="w-4 h-4 text-purple-400"></i> Thumbnail
-        </button>
-        <button class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]" data-target="voice">
-          <i data-lucide="mic-vocal" class="w-4 h-4 text-sky-400"></i> Voice
-        </button>
-        <button class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]" data-target="seo">
-          <i data-lucide="search" class="w-4 h-4 text-emerald-400"></i> Title & SEO
-        </button>
-        <div class="px-3 mt-6 mb-2 text-[11px] uppercase tracking-[.2em] text-gray-500 dark:text-gray-400">Finalize</div>
-        <button class="nav-item w-full text-left px-4 py-3 rounded-xl flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]" data-target="checklist">
-          <i data-lucide="check-square" class="w-4 h-4 text-yellow-400"></i> Checklist
-        </button>
-      </nav>
-
-      <div class="p-4 border-t dark:border-[#2a2a2a] border-gray-200 space-y-2">
-        <button id="btn-save" class="w-full bg-red-600 hover:bg-red-700 text-white rounded-xl py-2.5 font-semibold flex items-center justify-center gap-2">
-          <i data-lucide="save" class="w-4 h-4"></i> Save Project
-        </button>
-        <button id="btn-theme" class="w-full rounded-xl py-2.5 font-semibold border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a]">
-          Toggle Theme
+      <div class="p-4 border-t border-slate-800">
+        <button onclick="toggleProjectManager()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 py-2 px-3 rounded-lg text-sm font-medium flex items-center justify-center space-x-2 transition">
+          <i class="fa-solid fa-folder-open"></i> <span>Project Manager</span>
         </button>
       </div>
     </aside>
-
-    <main class="flex-1 flex flex-col overflow-hidden dark:bg-[#121212] bg-gray-50">
-      <header class="h-16 shrink-0 border-b dark:border-[#2a2a2a] border-gray-200 dark:bg-yt-black bg-white px-4 md:px-6 flex items-center justify-between gap-4">
-        <div class="flex items-center gap-3 md:gap-4">
-          <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2a2a2a]">
-            <i data-lucide="menu"></i>
-          </button>
-          <div class="rounded-full p-1 dark:bg-[#2a2a2a] bg-gray-200 flex items-center">
-            <button id="lang-id" class="px-4 py-1.5 rounded-full text-sm font-semibold shadow bg-white text-gray-900 dark:bg-yt-black dark:text-white">🇮🇩 Indonesia</button>
-            <button id="lang-intl" class="px-4 py-1.5 rounded-full text-sm font-semibold text-gray-500 dark:text-gray-400">🌍 International</button>
-          </div>
-          <div class="hidden lg:flex items-center gap-2 border-l pl-4 ml-1 dark:border-[#2a2a2a] border-gray-300">
-            <span id="badge-category" class="hidden inline-flex items-center gap-1 text-xs px-2 py-1 rounded border dark:bg-[#1a1a1a] dark:border-[#3a3a3a] bg-gray-100 border-gray-300 text-gray-700 dark:text-gray-300">
-              <i data-lucide="folder" class="w-3 h-3"></i> <span id="badge-category-text"></span>
-            </span>
-            <span id="badge-topic" class="hidden inline-flex items-center gap-1 text-xs px-2 py-1 rounded border dark:bg-[#1a1a1a] dark:border-[#3a3a3a] bg-gray-100 border-gray-300 text-gray-700 dark:text-gray-300">
-              <i data-lucide="lightbulb" class="w-3 h-3"></i> <span id="badge-topic-text"></span>
-            </span>
-          </div>
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto">
+      <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+        <div class="flex items-center space-x-4">
+          <h1 id="page-title" class="text-xl font-bold text-white">Dashboard Utama</h1>
         </div>
-        <div class="flex items-center gap-3">
-          <button id="btn-search" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#2a2a2a]"><i data-lucide="search"></i></button>
-          <span class="inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded border border-green-200 dark:border-green-800 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 font-medium">
-            <i data-lucide="zap" class="w-3 h-3"></i> Ready
+        <div class="flex items-center space-x-3">
+          <span class="bg-emerald-500/10 text-emerald-400 text-xs px-3 py-1 rounded-full border border-emerald-500/20 font-medium">
+            <i class="fa-solid fa-circle text-[8px] mr-1.5 animate-pulse"></i> AI Ready & Active
           </span>
         </div>
       </header>
-
-      <div id="notice" class="hidden bg-blue-600 text-white px-4 md:px-6 py-2 text-sm flex items-center justify-between gap-3">
-        <div class="flex items-center gap-2"><i data-lucide="info" class="w-4 h-4"></i><span>Project tersimpan di localStorage.</span></div>
-        <button id="btn-close-notice" class="hover:underline">Close</button>
-      </div>
-
-      <div class="flex-1 overflow-y-auto p-4 md:p-8" id="content">
-        <!-- Dashboard -->
-        <section id="section-dashboard" class="section active">
-          <div class="max-w-6xl mx-auto space-y-8">
-            <div class="grid lg:grid-cols-2 gap-6 items-center">
-              <div class="glass rounded-[2rem] p-6 md:p-8">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600/10 text-red-500 text-xs font-semibold mb-4">
-                  <i data-lucide="sparkles" class="w-3 h-3"></i> ToolHub ID V4
-                </div>
-                <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight">Create YouTube Content Faster, in One Place.</h1>
-                <p class="mt-4 text-gray-600 dark:text-gray-300 max-w-xl">
-                  Dashboard ini menghubungkan semua tool: script, thumbnail, voice, SEO, dan checklist. Setiap menu bisa dibuka sendiri.
-                </p>
-                <div class="mt-6 flex flex-wrap gap-3">
-                  <button class="dash-jump px-5 py-3 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-semibold" data-target="script">Start Script</button>
-                  <button class="dash-jump px-5 py-3 rounded-2xl border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-semibold" data-target="thumbnail">Thumbnail</button>
-                  <button class="dash-jump px-5 py-3 rounded-2xl border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-semibold" data-target="voice">Voice</button>
-                </div>
-              </div>
-              <div class="grid gap-4">
-                <div class="glass rounded-[2rem] p-5">
-                  <div class="flex items-center justify-between">
-                    <div>
-                      <div class="text-xs uppercase tracking-wider text-gray-500 dark:text-gray-400">Current Project</div>
-                      <div id="dashboard-title" class="font-extrabold text-2xl mt-1">Belum ada project</div>
-                    </div>
-                    <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-400"><i data-lucide="folder-open"></i></div>
-                  </div>
-                  <p id="dashboard-subtitle" class="mt-3 text-sm text-gray-600 dark:text-gray-400">Pilih topik dan generate output untuk mengisi dashboard.</p>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="glass rounded-[2rem] p-5">
-                    <div class="text-xs uppercase text-gray-500 dark:text-gray-400">Tools Ready</div>
-                    <div id="dashboard-ready-count" class="text-3xl font-extrabold mt-2">0</div>
-                  </div>
-                  <div class="glass rounded-[2rem] p-5">
-                    <div class="text-xs uppercase text-gray-500 dark:text-gray-400">Last Save</div>
-                    <div id="dashboard-last-save" class="font-semibold mt-2">-</div>
-                  </div>
-                </div>
-              </div>
+      <div class="p-6 max-w-6xl mx-auto w-full flex-1">
+        <div id="tab-dashboard" class="space-y-6 tab-content">
+          <div class="bg-gradient-to-r from-indigo-900/40 to-slate-900 border border-indigo-500/20 p-6 rounded-2xl">
+            <div class="text-indigo-400 text-sm font-semibold mb-1"><i class="fa-solid fa-sparkles mr-1"></i> ToolHub ID V2.0</div>
+            <h2 class="text-3xl font-extrabold text-white mb-3">Satu tempat untuk bikin <span class="text-indigo-400">script</span>, <span class="text-indigo-400">thumbnail</span>, dan <span class="text-indigo-400">voice</span>.</h2>
+            <p class="text-slate-400 max-w-2xl mb-6">Dashboard ini jadi pusat kontrol semua tools. Pilih kategori, buat ide, generate script, hingga export hasilnya tanpa pindah-pindah aplikasi.</p>
+            <button onclick="switchTab('category')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2.5 rounded-xl transition shadow-lg shadow-indigo-600/30">
+              Mulai Project Baru <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+              <h3 class="font-bold text-lg mb-2 text-white"><i class="fa-solid fa-compass text-indigo-400 mr-2"></i> Panduan Cepat</h3>
+              <ul class="text-sm text-slate-400 space-y-2">
+                <li>• Pilih kategori konten terlebih dahulu di menu sebelah kiri.</li>
+                <li>• Masukkan topik dan generate ide konten terbaikmu.</li>
+                <li>• Gunakan Script & Voiceover Generator untuk menyelesaikan produksi.</li>
+              </ul>
             </div>
-
-            <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4" id="tool-grid">
-              <button class="dash-jump glass rounded-[1.5rem] p-5 text-left card-hover border border-transparent hover:border-gray-300 dark:hover:border-[#555]" data-target="script">
-                <div class="flex items-center justify-between">
-                  <i data-lucide="file-text" class="w-8 h-8 text-red-500"></i>
-                  <span class="text-xs px-2 py-1 rounded-full bg-red-500/10 text-red-500">Core</span>
-                </div>
-                <div class="font-extrabold text-lg mt-4">AI Script Generator</div>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Generate script lengkap dengan research, hook, body, dan CTA.</p>
-              </button>
-              <button class="dash-jump glass rounded-[1.5rem] p-5 text-left card-hover border border-transparent hover:border-gray-300 dark:hover:border-[#555]" data-target="thumbnail">
-                <div class="flex items-center justify-between">
-                  <i data-lucide="image" class="w-8 h-8 text-purple-400"></i>
-                  <span class="text-xs px-2 py-1 rounded-full bg-purple-500/10 text-purple-400">PNG</span>
-                </div>
-                <div class="font-extrabold text-lg mt-4">Thumbnail Ideas</div>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Buat 3 konsep thumbnail dan preview PNG langsung di browser.</p>
-              </button>
-              <button class="dash-jump glass rounded-[1.5rem] p-5 text-left card-hover border border-transparent hover:border-gray-300 dark:hover:border-[#555]" data-target="voice">
-                <div class="flex items-center justify-between">
-                  <i data-lucide="mic-vocal" class="w-8 h-8 text-sky-400"></i>
-                  <span class="text-xs px-2 py-1 rounded-full bg-sky-500/10 text-sky-400">Text</span>
-                </div>
-                <div class="font-extrabold text-lg mt-4">Voice Over</div>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Format voiceover, SSML ringan, dan siap untuk TTS API.</p>
-              </button>
-              <button class="dash-jump glass rounded-[1.5rem] p-5 text-left card-hover border border-transparent hover:border-gray-300 dark:hover:border-[#555]" data-target="seo">
-                <div class="flex items-center justify-between">
-                  <i data-lucide="search" class="w-8 h-8 text-emerald-400"></i>
-                  <span class="text-xs px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400">SEO</span>
-                </div>
-                <div class="font-extrabold text-lg mt-4">Title & SEO</div>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Judul, tags, hashtag, dan deskripsi siap copy-paste.</p>
-              </button>
-            </div>
-
-            <div class="grid lg:grid-cols-2 gap-6">
-              <div class="glass rounded-[1.75rem] p-6">
-                <div class="flex items-center justify-between mb-4">
-                  <h2 class="font-extrabold text-xl">Recent Project</h2>
-                  <button class="dash-jump text-sm font-semibold text-red-500" data-target="script">Open script</button>
-                </div>
-                <div id="dashboard-recent" class="space-y-3">
-                  <div class="rounded-2xl p-4 skeleton h-32"></div>
-                  <div class="grid grid-cols-2 gap-2">
-                    <div class="rounded-2xl h-12 skeleton"></div>
-                    <div class="rounded-2xl h-12 skeleton"></div>
-                  </div>
-                </div>
-              </div>
-              <div class="glass rounded-[1.75rem] p-6">
-                <div class="flex items-center justify-between mb-4">
-                  <h2 class="font-extrabold text-xl">Search Tool</h2>
-                  <span class="text-xs text-gray-500 dark:text-gray-400">type to filter cards</span>
-                </div>
-                <input id="tool-search" type="text" placeholder="Cari tool..." class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a] mb-4">
-                <div class="grid grid-cols-2 gap-2 text-sm">
-                  <button class="dash-jump px-3 py-2 rounded-xl bg-gray-100 dark:bg-[#1a1a1a] hover:bg-gray-200 dark:hover:bg-[#2a2a2a]" data-target="script">script</button>
-                  <button class="dash-jump px-3 py-2 rounded-xl bg-gray-100 dark:bg-[#1a1a1a] hover:bg-gray-200 dark:hover:bg-[#2a2a2a]" data-target="thumbnail">thumbnail</button>
-                  <button class="dash-jump px-3 py-2 rounded-xl bg-gray-100 dark:bg-[#1a1a1a] hover:bg-gray-200 dark:hover:bg-[#2a2a2a]" data-target="voice">voice</button>
-                  <button class="dash-jump px-3 py-2 rounded-xl bg-gray-100 dark:bg-[#1a1a1a] hover:bg-gray-200 dark:hover:bg-[#2a2a2a]" data-target="seo">seo</button>
-                </div>
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+              <h3 class="font-bold text-lg mb-2 text-white"><i class="fa-solid fa-floppy-disk text-indigo-400 mr-2"></i> Status Sistem</h3>
+              <p class="text-sm text-slate-400 mb-3">Penyimpanan otomatis aktif menggunakan LocalStorage browser Anda.</p>
+              <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs font-mono text-emerald-400">
+                Status: Siap digunakan (Tanpa Error)
               </div>
             </div>
           </div>
-        </section>
-
-        <!-- SCRIPT -->
-        <section id="section-script" class="section">
-          <div class="max-w-6xl mx-auto space-y-6">
-            <div class="flex flex-wrap items-center justify-between gap-3">
+        </div>
+        <div id="tab-category" class="space-y-6 tab-content hidden">
+          <div>
+            <h2 class="text-2xl font-bold text-white mb-1">Pilih Kategori Konten</h2>
+            <p class="text-slate-400 text-sm">Pilih niche atau kategori untuk membuat ide dan script jadi lebih relevan.</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div onclick="selectCategory('Gaming & Esports')" class="category-card cursor-pointer bg-slate-900 border border-slate-800 hover:border-indigo-500 p-5 rounded-xl transition">
+              <div class="text-indigo-400 text-xl mb-3"><i class="fa-solid fa-gamepad"></i></div>
+              <h3 class="font-bold text-white mb-1">Gaming & Esports</h3>
+              <p class="text-xs text-slate-400">Gameplay, tips trik, review game, dan berita turnamen.</p>
+            </div>
+            <div onclick="selectCategory('Vlog & Storytelling')" class="category-card cursor-pointer bg-slate-900 border border-slate-800 hover:border-indigo-500 p-5 rounded-xl transition">
+              <div class="text-indigo-400 text-xl mb-3"><i class="fa-solid fa-video"></i></div>
+              <h3 class="font-bold text-white mb-1">Vlog & Storytelling</h3>
+              <p class="text-xs text-slate-400">Kisah unik, sejarah, essay pendek, dan daily vlog.</p>
+            </div>
+            <div onclick="selectCategory('Automotive & Racing')" class="category-card cursor-pointer bg-slate-900 border border-slate-800 hover:border-indigo-500 p-5 rounded-xl transition">
+              <div class="text-indigo-400 text-xl mb-3"><i class="fa-solid fa-motorcycle"></i></div>
+              <h3 class="font-bold text-white mb-1">Automotive & Racing</h3>
+              <p class="text-xs text-slate-400">MotoGP, review motor/mobil, modifikasi, dan info teknik.</p>
+            </div>
+          </div>
+          <div id="selected-category-alert" class="hidden bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 p-4 rounded-xl text-sm">
+            Kategori aktif dipilih: <strong id="active-cat-name"></strong>. Silakan lanjut ke menu <strong>Content Ideation</strong>!
+          </div>
+        </div>
+        <div id="tab-ideation" class="space-y-6 tab-content hidden">
+          <div>
+            <h2 class="text-2xl font-bold text-white mb-1">Content Ideation</h2>
+            <p class="text-slate-400 text-sm">Masukkan topik kasar atau kata kunci video Anda.</p>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-300 mb-2">Topik / Ide Kasar</label>
+              <input type="text" id="topic-input" placeholder="Contoh: Rahasia dibalik kemenangan tim underdog..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500">
+            </div>
+            <button onclick="generateIdeas()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2.5 rounded-lg transition text-sm">
+              <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Buat Ide Konten
+            </button>
+          </div>
+          <div id="ideas-result" class="space-y-3"></div>
+        </div>
+        <div id="tab-script" class="space-y-6 tab-content hidden">
+          <div>
+            <h2 class="text-2xl font-bold text-white mb-1">Script Generator</h2>
+            <p class="text-slate-400 text-sm">Atur durasi dan gaya bahasa untuk naskah video Anda.</p>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <h2 class="text-2xl md:text-3xl font-extrabold flex items-center gap-2"><i data-lucide="file-text" class="text-red-500"></i> AI Script Generator</h2>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Generate script lengkap dengan research, hook, body, payoff, dan CTA.</p>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Gaya Bahasa</label>
+                <select id="script-style" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500">
+                  <option value="Storytelling">Storytelling Menarik</option>
+                  <option value="Casual">Casual / Santai</option>
+                  <option value="Educational">Edukatif & Fakta</option>
+                  <option value="Dramatic">Dramatis / Menegangkan</option>
+                </select>
               </div>
-              <button class="dash-jump px-4 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-semibold" data-target="dashboard">
-                Back to Dashboard
-              </button>
-            </div>
-
-            <div class="grid lg:grid-cols-3 gap-6">
-              <div class="lg:col-span-2 glass rounded-[1.75rem] p-5 md:p-6">
-                <div class="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-sm font-semibold mb-2">Topik / Judul</label>
-                    <input id="script-topic" type="text" placeholder="Contoh: sejarah AI, review iPhone, misteri dunia..." class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
-                  </div>
-                  <div>
-                    <label class="block text-sm font-semibold mb-2">Brief / Angle</label>
-                    <input id="script-brief" type="text" placeholder="Contoh: investigatif, edukatif, storytelling..." class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
-                  </div>
-                  <div>
-                    <label class="block text-sm font-semibold mb-2">Category</label>
-                    <select id="script-category" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"></select>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-semibold mb-2">Sub Category</label>
-                    <select id="script-subcategory" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"></select>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-semibold mb-2">Duration</label>
-                    <select id="script-duration" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]"></select>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-semibold mb-2">Language</label>
-                    <select id="script-language" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
-                      <option value="id">Bahasa Indonesia</option>
-                      <option value="en">English</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="mt-4 flex flex-wrap gap-2">
-                  <button id="btn-script-research" class="px-4 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-semibold">
-                    Research Facts
-                  </button>
-                  <button id="btn-script-generate" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold flex items-center gap-2">
-                    <i data-lucide="sparkles" class="w-4 h-4"></i> Generate Script
-                  </button>
-                  <button id="btn-script-copy" class="px-4 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-semibold">Copy</button>
-                  <button id="btn-script-txt" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold">Download TXT</button>
-                </div>
-
-                <div id="script-skeleton" class="hidden mt-5 space-y-3">
-                  <div class="h-4 rounded skeleton"></div>
-                  <div class="h-4 rounded skeleton"></div>
-                  <div class="h-4 rounded skeleton w-5/6"></div>
-                  <div class="h-4 rounded skeleton"></div>
-                </div>
-
-                <div class="mt-5">
-                  <div class="flex items-center justify-between mb-2">
-                    <h3 class="font-bold">Output</h3>
-                    <span id="script-stat" class="text-xs text-gray-500 dark:text-gray-400">0 words</span>
-                  </div>
-                  <textarea id="script-output" class="w-full min-h-[460px] rounded-3xl p-5 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#111] font-mono text-sm leading-relaxed" spellcheck="false" placeholder="Generate script di sini..."></textarea>
-                </div>
-              </div>
-
-              <div class="space-y-6">
-                <div class="glass rounded-[1.75rem] p-5">
-                  <div class="flex items-center justify-between mb-4">
-                    <h3 class="font-bold">Picked Idea</h3>
-                    <button id="btn-script-ideas" class="text-xs font-semibold text-red-500">Generate ideas</button>
-                  </div>
-                  <div id="script-ideas" class="grid gap-3"></div>
-                </div>
-                <div class="glass rounded-[1.75rem] p-5">
-                  <h3 class="font-bold mb-3">Research Notes</h3>
-                  <div id="script-research" class="space-y-3 text-sm text-gray-600 dark:text-gray-300">
-                    <div class="rounded-2xl p-4 border dark:border-[#3a3a3a] border-gray-200 bg-white/60 dark:bg-[#1a1a1a]">Klik <b>Research Facts</b> untuk ambil ringkasan dari internet jika function tersedia.</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- THUMBNAIL -->
-        <section id="section-thumbnail" class="section">
-          <div class="max-w-6xl mx-auto space-y-6">
-            <div class="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h2 class="text-2xl md:text-3xl font-extrabold flex items-center gap-2"><i data-lucide="image" class="text-purple-400"></i> Thumbnail Generator</h2>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Buat 3 konsep thumbnail dan preview PNG langsung di browser.</p>
-              </div>
-              <button class="dash-jump px-4 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-semibold" data-target="dashboard">Back to Dashboard</button>
-            </div>
-
-            <div class="glass rounded-[1.75rem] p-5 md:p-6">
-              <div class="grid md:grid-cols-3 gap-4">
-                <div class="md:col-span-2">
-                  <label class="block text-sm font-semibold mb-2">Judul / Brief</label>
-                  <input id="thumb-title" type="text" placeholder="Contoh: 3 fakta tentang AI" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
-                </div>
-                <div>
-                  <label class="block text-sm font-semibold mb-2">Style</label>
-                  <input id="thumb-style" type="text" placeholder="Cinematic, bold, high contrast" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
-                </div>
-              </div>
-              <div class="mt-4 flex flex-wrap gap-2">
-                <button id="btn-thumb-generate" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold flex items-center gap-2"><i data-lucide="sparkles" class="w-4 h-4"></i> Generate Thumbnails</button>
-                <button id="btn-thumb-copy-all" class="px-4 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-semibold">Copy All Prompts</button>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Target Durasi</label>
+                <select id="script-duration" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500">
+                  <option value="1 Menit (Shorts)">1 Menit (YouTube Shorts)</option>
+                  <option value="5 Menit (Mid-Form)">5 Menit</option>
+                  <option value="10 Menit (Long-Form)">10 Menit</option>
+                </select>
               </div>
             </div>
-            <div id="thumb-results" class="grid gap-5"></div>
+            <button onclick="generateScript()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2.5 rounded-lg transition text-sm">
+              <i class="fa-solid fa-file-lines mr-2"></i> Generate Script Otomatis
+            </button>
           </div>
-        </section>
-
-        <!-- VOICE -->
-        <section id="section-voice" class="section">
-          <div class="max-w-6xl mx-auto space-y-6">
-            <div class="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h2 class="text-2xl md:text-3xl font-extrabold flex items-center gap-2"><i data-lucide="mic-vocal" class="text-sky-400"></i> Voice Generator</h2>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Format voiceover dan siapkan output untuk TTS / MP3 API.</p>
-              </div>
-              <button class="dash-jump px-4 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-semibold" data-target="dashboard">Back to Dashboard</button>
-            </div>
-
-            <div class="grid lg:grid-cols-3 gap-6">
-              <div class="lg:col-span-2 glass rounded-[1.75rem] p-5 md:p-6">
-                <div class="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label class="block text-sm font-semibold mb-2">Source</label>
-                    <select id="voice-source" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
-                      <option value="script">Use current script</option>
-                      <option value="manual">Manual text</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-semibold mb-2">Persona</label>
-                    <input id="voice-persona" type="text" value="Pria muda, tegas, natural, engaging" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
-                  </div>
-                  <div>
-                    <label class="block text-sm font-semibold mb-2">Emotion</label>
-                    <select id="voice-emotion" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
-                      <option>Excited</option><option>Calm</option><option>Serious</option><option>Suspense</option><option>Inspirational</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="block text-sm font-semibold mb-2">Speaking Speed</label>
-                    <select id="voice-speed" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
-                      <option>Slow</option><option selected>Normal</option><option>Fast</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="mt-4">
-                  <label class="block text-sm font-semibold mb-2">Voiceover Text</label>
-                  <textarea id="voice-input" class="w-full min-h-56 rounded-3xl p-5 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#111] font-mono text-sm" placeholder="Teks voiceover akan muncul di sini..."></textarea>
-                </div>
-
-                <div class="mt-4 flex flex-wrap gap-2">
-                  <button id="btn-voice-from-script" class="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-semibold">Pull from Script</button>
-                  <button id="btn-voice-generate" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold">Generate Voice Format</button>
-                  <button id="btn-voice-copy" class="px-4 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-semibold">Copy</button>
-                  <button id="btn-voice-txt" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold">Download TXT</button>
-                </div>
-              </div>
-
-              <div class="space-y-6">
-                <div class="glass rounded-[1.75rem] p-5">
-                  <div class="flex items-center justify-between">
-                    <h3 class="font-bold">TTS Ready</h3>
-                    <span class="text-xs px-2 py-1 rounded-full bg-sky-500/10 text-sky-400">API-ready</span>
-                  </div>
-                  <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
-                    <div class="rounded-2xl p-3 bg-gray-100 dark:bg-[#1a1a1a]"><div class="text-xs text-gray-500">Stability</div><div id="voice-stability" class="font-bold mt-1">—</div></div>
-                    <div class="rounded-2xl p-3 bg-gray-100 dark:bg-[#1a1a1a]"><div class="text-xs text-gray-500">Similarity</div><div id="voice-similarity" class="font-bold mt-1">—</div></div>
-                    <div class="rounded-2xl p-3 bg-gray-100 dark:bg-[#1a1a1a]"><div class="text-xs text-gray-500">Style</div><div id="voice-style" class="font-bold mt-1">—</div></div>
-                    <div class="rounded-2xl p-3 bg-gray-100 dark:bg-[#1a1a1a]"><div class="text-xs text-gray-500">Boost</div><div id="voice-boost" class="font-bold mt-1">—</div></div>
-                  </div>
-                </div>
-                <div class="glass rounded-[1.75rem] p-5">
-                  <h3 class="font-bold mb-3">Download MP3 (optional)</h3>
-                  <p class="text-sm text-gray-600 dark:text-gray-400">Siap disambungkan ke function/API kalau kamu memasukkan key nanti. Sekarang tool tetap bisa dipakai untuk naskah voice dan formatting.</p>
-                </div>
-              </div>
+          <div id="script-output" class="bg-slate-900 border border-slate-800 p-6 rounded-xl hidden space-y-3">
+            <h3 class="font-bold text-white text-lg"><i class="fa-solid fa-check text-emerald-400 mr-2"></i> Hasil Script Naskah</h3>
+            <textarea id="script-text-area" rows="8" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-4 text-slate-200 text-sm focus:outline-none focus:border-indigo-500"></textarea>
+            <div class="flex justify-end">
+              <button onclick="alert('Script berhasil disalin ke clipboard!')" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-4 py-2 rounded-lg font-medium">Salin Teks</button>
             </div>
           </div>
-        </section>
-
-        <!-- SEO -->
-        <section id="section-seo" class="section">
-          <div class="max-w-6xl mx-auto space-y-6">
-            <div class="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h2 class="text-2xl md:text-3xl font-extrabold flex items-center gap-2"><i data-lucide="search" class="text-emerald-400"></i> Title & SEO</h2>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Buat judul, tags, hashtag, dan deskripsi siap copy-paste.</p>
-              </div>
-              <button class="dash-jump px-4 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-semibold" data-target="dashboard">Back to Dashboard</button>
-            </div>
-
-            <div class="glass rounded-[1.75rem] p-5 md:p-6">
-              <div class="grid md:grid-cols-3 gap-4">
-                <div class="md:col-span-2">
-                  <label class="block text-sm font-semibold mb-2">SEO Topic / Keyword</label>
-                  <input id="seo-topic" type="text" placeholder="Contoh: sejarah AI, tips investasi, misteri laut..." class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
-                </div>
-                <div>
-                  <label class="block text-sm font-semibold mb-2">Target Country</label>
-                  <select id="seo-country" class="w-full rounded-2xl px-4 py-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#1a1a1a]">
-                    <option value="Indonesia">Indonesia</option>
-                    <option value="Global">Global</option>
-                    <option value="United States">United States</option>
-                    <option value="United Kingdom">United Kingdom</option>
-                    <option value="Malaysia">Malaysia</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="mt-4 flex flex-wrap gap-2">
-                <button id="btn-seo-generate" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-semibold">Generate SEO</button>
-                <button id="btn-seo-copy" class="px-4 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-semibold">Copy All</button>
-                <button id="btn-seo-txt" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold">Download TXT</button>
-              </div>
-            </div>
-
-            <div id="seo-output" class="grid gap-5"></div>
+        </div>
+        <div id="tab-voiceover" class="space-y-6 tab-content hidden">
+          <div>
+            <h2 class="text-2xl font-bold text-white mb-1">Voiceover Generator</h2>
+            <p class="text-slate-400 text-sm">Panduan dan teks untuk sinkronisasi suara atau TTS.</p>
           </div>
-        </section>
-
-        <!-- CHECKLIST -->
-        <section id="section-checklist" class="section">
-          <div class="max-w-6xl mx-auto space-y-6">
-            <div class="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h2 class="text-2xl md:text-3xl font-extrabold flex items-center gap-2"><i data-lucide="check-square" class="text-yellow-400"></i> Content Checklist</h2>
-                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Checklist sebelum publish.</p>
-              </div>
-              <button class="dash-jump px-4 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 hover:bg-gray-100 dark:hover:bg-[#2a2a2a] font-semibold" data-target="dashboard">Back to Dashboard</button>
-            </div>
-
-            <div class="glass rounded-[1.75rem] p-5 md:p-6 max-w-3xl mx-auto">
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="font-bold">Preparation Steps</h3>
-                <div id="check-progress" class="text-sm text-gray-500 dark:text-gray-400">0%</div>
-              </div>
-              <div id="checklist" class="space-y-3"></div>
+          <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+            <p class="text-sm text-slate-300">Gunakan teks dari script yang telah di-generate sebelumnya untuk diproses dengan ElevenLabs atau perekaman manual.</p>
+            <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 text-sm text-slate-400" id="vo-preview-box">
+              Belum ada script tersedia. Selesaikan menu Script Generator terlebih dahulu.
             </div>
           </div>
-        </section>
-
+        </div>
+        <div id="tab-thumbnail" class="space-y-6 tab-content hidden">
+          <div>
+            <h2 class="text-2xl font-bold text-white mb-1">Thumbnail Ideas</h2>
+            <p class="text-slate-400 text-sm">Konsep visual untuk mendongkrak Click-Through Rate (CTR).</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+              <span class="text-xs bg-indigo-500/10 text-indigo-400 px-2 py-1 rounded font-semibold">Konsep 1: High Contrast</span>
+              <p class="text-sm text-slate-300 mt-3">Gunakan close-up ekspresi wajah terkejut dengan latar belakang warna kontras tinggi (Kuning/Merah).</p>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+              <span class="text-xs bg-indigo-500/10 text-indigo-400 px-2 py-1 rounded font-semibold">Konsep 2: Curiosity Gap</span>
+              <p class="text-sm text-slate-300 mt-3">Tampilkan screenshot objek utama dengan panah merah atau lingkaran penanda rahasia.</p>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
+              <span class="text-xs bg-indigo-500/10 text-indigo-400 px-2 py-1 rounded font-semibold">Konsep 3: Minimalist Text</span>
+              <p class="text-sm text-slate-300 mt-3">Teks tebal 3 kata maksimal dengan visual sinematik berkualitas tinggi tanpa banyak gangguan.</p>
+            </div>
+          </div>
+        </div>
+        <div id="tab-seo" class="space-y-6 tab-content hidden">
+          <div>
+            <h2 class="text-2xl font-bold text-white mb-1">Title & SEO</h2>
+            <p class="text-slate-400 text-sm">Judul, tags, dan deskripsi optimal untuk algoritma YouTube.</p>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-slate-300 mb-1">Rekomendasi Judul</label>
+              <input type="text" readonly value="TERUNGKAP! Inilah Alasan Sebenarnya di Balik Peristiwa Ini..." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-slate-300 text-sm">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-300 mb-1">Tags / Kata Kunci</label>
+              <textarea readonly rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-slate-300 text-sm">youtube tips, content creator indonesia, strategi konten viral, toolhub id</textarea>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   </div>
-
-  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-3 pointer-events-none"></div>
-
+  <div id="project-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 max-w-md w-full p-6 rounded-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-bold text-lg text-white">Project Manager</h3>
+        <button onclick="toggleProjectManager()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <p class="text-sm text-slate-400">Data proyek Anda tersimpan secara lokal di browser secara otomatis.</p>
+      <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+        <div class="text-xs text-slate-400">Kategori Aktif: <span id="pm-cat" class="text-white font-medium">-</span></div>
+        <div class="text-xs text-slate-400">Topik Terakhir: <span id="pm-topic" class="text-white font-medium">-</span></div>
+      </div>
+      <div class="flex justify-end space-x-2 pt-2">
+        <button onclick="toggleProjectManager()" class="bg-slate-800 hover:bg-slate-700 text-white text-xs px-4 py-2 rounded-lg font-medium">Tutup</button>
+      </div>
+    </div>
+  </div>
   <script>
-    const STATE_KEY = 'ytSuiteStateV4';
-    const CATEGORIES = {
-      "Teknologi": ["Gadget & Review","Artificial Intelligence","Software & Aplikasi","Cybersecurity & Hacking","Programming & Coding","Startup & Tech Business","Space Tech & Robotik","Internet & Media Sosial"],
-      "Gaming": ["Review Game","Tips & Trick Game","Esports & Turnamen","Game Lore & Cerita","Retro Gaming","Mobile Gaming","PC / Console Gaming","Game Indie"],
-      "Sejarah": ["Sejarah Dunia","Sejarah Indonesia","Perang & Militer","Peradaban Kuno","Tokoh Bersejarah","Misteri Sejarah","Revolusi & Politik","Artefak Kuno"],
-      "Bisnis & Finansial": ["Investasi & Saham","Crypto & Blockchain","Cara Menghasilkan Uang","Kisah Sukses Pengusaha","Marketing & Branding","E-commerce & Dropship","Personal Finance","Startup Failure Story"],
-      "Sains & Edukasi": ["Fisika & Alam Semesta","Biologi & Tubuh Manusia","Kimia & Eksperimen","Psikologi & Perilaku","Matematika & Logika","Geografi & Bumi","Lingkungan & Iklim","Medis & Kesehatan"],
-      "Hiburan & Pop Culture": ["Drama & Gosip Selebriti","Review Film & Series","Musik & Industri","Anime & Manga","Meme & Internet Culture","Behind The Scene","Award & Penghargaan","Trending Topic"],
-      "Misteri & Paranormal": ["Urban Legend","Kisah Horor Nyata","Fenomena Tak Terjelas","Alien & UFO","Haunted Places","Cryptid","Okultisme & Ritual","True Crime Mystery"],
-      "Personal & Motivasi": ["Self Improvement","Produktivitas & Habit","Mental Health","Kisah Inspiratif","Pengalaman Pribadi","Relationship","Parenting","Minimalism"],
-      "Olahraga": ["Sepak Bola","Basket & NBA","MMA & Combat Sports","Olahraga Ekstrem","Kisah Atlet","Olimpiade & Event","Analisis Pertandingan","Olahraga Tradisional"],
-      "Hiburan Ringan": ["Fakta Unik & Aneh","Rangkuman & Kompilasi","Challenge & Eksperimen","Reaksi & Commentary","Parodi & Satire","Opini & Essay","Ranking & List","Myth Busting"]
-    };
-    const DURATIONS = [
-      { label:'30 detik', words: 70, type:'Shorts/Reels' },
-      { label:'1 menit', words: 140, type:'Shorts/Reels' },
-      { label:'2 menit', words: 280, type:'Short-Form' },
-      { label:'3 menit', words: 420, type:'Short-Form' },
-      { label:'5 menit', words: 700, type:'Mid-Form' },
-      { label:'8 menit', words: 1120, type:'Mid-Form' },
-      { label:'10 menit', words: 1400, type:'Mid-Form' },
-      { label:'15 menit', words: 2100, type:'Long-Form' },
-      { label:'20 menit', words: 2800, type:'Long-Form' },
-      { label:'30 menit', words: 4200, type:'Documentary' },
-      { label:'45 menit', words: 6300, type:'Deep-Dive' },
-      { label:'60 menit', words: 8400, type:'Masterclass' },
-    ];
-    const CHECKLIST_ITEMS = [
-      ['Idea & category set', false],
-      ['Script completed', false],
-      ['Voiceover drafted', false],
-      ['Thumbnail ready', false],
-      ['Title & tags ready', false],
-      ['Description written', false],
-      ['Subtitle planned', false],
-      ['Pinned comment planned', false],
-      ['B-roll/assets ready', false],
-      ['Upload checklist done', false],
-    ];
-
-    const defaultState = {
-      version: 4,
-      theme: 'dark',
-      language: 'id',
-      category: '',
-      subcategory: '',
-      topic: '',
-      brief: '',
-      selectedIdea: null,
-      research: null,
-      script: '',
-      scriptMeta: {},
-      voice: { text:'', persona:'Pria muda, tegas, natural, engaging', emotion:'Normal', speed:'Normal', stability:'55%', similarity:'78%', style:'14%', boost:'On' },
-      thumbnails: [],
-      seo: null,
-      checklist: CHECKLIST_ITEMS.map(([label]) => ({ label, checked: false })),
-      lastUpdated: null
-    };
-    let STATE = loadState() || structuredClone(defaultState);
-
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(STATE_KEY);
-        if (!raw) return null;
-        const parsed = JSON.parse(raw);
-        return parsed && parsed.version === 4 ? parsed : null;
-      } catch { return null; }
-    }
-
-    function saveState(silent=false) {
-      STATE.lastUpdated = new Date().toISOString();
-      localStorage.setItem(STATE_KEY, JSON.stringify(STATE));
-      renderDashboard();
-      updateBadges();
-      if (!silent) showToast('Project saved.');
-    }
-
-    function showToast(message, type='info') {
-      const el = document.createElement('div');
-      const classes = { info:'bg-blue-600 text-white', success:'bg-emerald-600 text-white', error:'bg-red-600 text-white' };
-      el.className = `pointer-events-auto px-4 py-3 rounded-2xl shadow-xl flex items-start gap-3 ${classes[type] || classes.info}`;
-      el.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle-2' : type === 'error' ? 'alert-circle' : 'info'}" class="w-5 h-5 shrink-0 mt-0.5"></i><div class="text-sm font-medium leading-snug">${message}</div>`;
-      document.getElementById('toast-container').appendChild(el);
-      if (window.lucide) lucide.createIcons();
-      setTimeout(() => {
-        el.style.transition = 'all .25s ease';
-        el.style.opacity = '0';
-        el.style.transform = 'translateX(14px)';
-        setTimeout(() => el.remove(), 250);
-      }, 2500);
-    }
-
-    function copyText(text, msg='Copied!') {
-      navigator.clipboard.writeText(text || '').then(() => showToast(msg, 'success')).catch(() => showToast('Copy failed.', 'error'));
-    }
-
-    function downloadFile(filename, content, mime='text/plain') {
-      const blob = new Blob([content], { type: mime });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function updateTheme() {
-      document.documentElement.classList.toggle('dark', STATE.theme === 'dark');
-      document.documentElement.classList.toggle('light', STATE.theme !== 'dark');
-      localStorage.setItem('ytSuiteTheme', STATE.theme);
-      if (STATE.theme === 'light') {
-        document.body.classList.remove('dark');
-        document.body.classList.add('bg-gray-50');
-      }
-    }
-
-    function applyThemeFromStorage() {
-      const saved = localStorage.getItem('ytSuiteTheme');
-      if (saved) STATE.theme = saved;
-      updateTheme();
-    }
-
-    function updateBadges() {
-      const cat = document.getElementById('badge-category');
-      const topic = document.getElementById('badge-topic');
-      const catText = document.getElementById('badge-category-text');
-      const topicText = document.getElementById('badge-topic-text');
-      if (STATE.category) {
-        cat.classList.remove('hidden');
-        catText.textContent = `${STATE.category} • ${STATE.subcategory || 'All'}`;
-      } else cat.classList.add('hidden');
-      if (STATE.topic || STATE.selectedIdea) {
-        topic.classList.remove('hidden');
-        topicText.textContent = STATE.selectedIdea?.title || STATE.topic;
-      } else topic.classList.add('hidden');
-    }
-
-    function showSection(name) {
-      const sectionName = name || 'dashboard';
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      const target = document.getElementById(`section-${sectionName}`);
-      if (target) target.classList.add('active');
-
-      document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.querySelector(`.nav-item[data-target="${sectionName}"]`);
-      if (activeBtn) activeBtn.classList.add('active');
-
-      location.hash = sectionName === 'dashboard' ? '' : sectionName;
-      if (window.innerWidth < 768) document.getElementById('mobile-menu-btn')?.blur();
-      if (window.lucide) lucide.createIcons();
-    }
-
-    function renderDashboard() {
-      const projectTitle = STATE.selectedIdea?.title || STATE.topic || 'Belum ada project';
-      const projectSub = STATE.selectedIdea?.angle || STATE.brief || 'Pilih topik untuk mulai.';
-      const readyCount = [STATE.script, STATE.voice.text, STATE.thumbnails.length, STATE.seo].filter(Boolean).length;
-      const lastSave = STATE.lastUpdated ? new Date(STATE.lastUpdated).toLocaleString('id-ID', { dateStyle:'medium', timeStyle:'short' }) : '-';
-      document.getElementById('dashboard-title').textContent = projectTitle;
-      document.getElementById('dashboard-subtitle').textContent = projectSub;
-      document.getElementById('dashboard-ready-count').textContent = String(readyCount);
-      document.getElementById('dashboard-last-save').textContent = lastSave;
-
-      const el = document.getElementById('dashboard-recent');
-      if (el) {
-        el.innerHTML = `
-          <div class="rounded-2xl p-4 border border-gray-200 dark:border-[#3a3a3a] bg-white/60 dark:bg-[#1a1a1a]">
-            <div class="flex items-center justify-between gap-2">
-              <div class="font-bold text-sm truncate">${projectTitle}</div>
-              <span class="text-[10px] px-2 py-1 rounded-full ${STATE.script ? 'bg-emerald-500/10 text-emerald-500' : 'bg-yellow-500/10 text-yellow-500'}">${STATE.script ? 'Script ready' : 'Draft'}</span>
-            </div>
-            <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">${projectSub}</div>
-            <div class="mt-3 flex flex-wrap gap-2 text-[11px]">
-              <span class="px-2 py-1 rounded-full bg-gray-100 dark:bg-[#222]">Category: ${STATE.category || '-'}</span>
-              <span class="px-2 py-1 rounded-full bg-gray-100 dark:bg-[#222]">Topic: ${STATE.topic || '-'}</span>
-              <span class="px-2 py-1 rounded-full bg-gray-100 dark:bg-[#222]">Saved: ${lastSave}</span>
-            </div>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            ${[
-              ['Script', !!STATE.script],
-              ['Voice', !!STATE.voice.text],
-              ['Thumbnail', STATE.thumbnails.length > 0],
-              ['SEO', !!STATE.seo],
-            ].map(([label, ok]) => `<div class="flex items-center justify-between rounded-2xl px-3 py-2 bg-gray-100 dark:bg-[#1a1a1a] text-sm"><span>${label}</span><span class="font-bold ${ok ? 'text-emerald-500' : 'text-gray-400'}">${ok ? 'Done' : 'Pending'}</span></div>`).join('')}
-          </div>
-        `;
-      }
-      if (window.lucide) lucide.createIcons();
-    }
-
-    function populateSelectors() {
-      const catSel = document.getElementById('script-category');
-      const subSel = document.getElementById('script-subcategory');
-      const durSel = document.getElementById('script-duration');
-      catSel.innerHTML = Object.keys(CATEGORIES).map(cat => `<option value="${cat}">${cat}</option>`).join('');
-      durSel.innerHTML = DURATIONS.map((d, idx) => `<option value="${idx}">${d.label} (${d.type})</option>`).join('');
-      const fillSubs = (cat) => {
-        subSel.innerHTML = (CATEGORIES[cat] || []).map(s => `<option value="${s}">${s}</option>`).join('');
-      };
-      fillSubs(catSel.value || Object.keys(CATEGORIES)[0]);
-      catSel.addEventListener('change', () => {
-        fillSubs(catSel.value);
-        STATE.category = catSel.value;
-        STATE.subcategory = subSel.value;
-        saveState(true);
-      });
-      subSel.addEventListener('change', () => {
-        STATE.subcategory = subSel.value;
-        saveState(true);
-      });
-      durSel.addEventListener('change', () => { saveState(true); });
-      return fillSubs;
-    }
-
-    function buildIdea(title, topic, sub, type='General') {
-      const hooks = [
-        `Kamu mungkin tidak menyangka bahwa ${topic} punya lapisan yang lebih dalam dari yang terlihat.`,
-        `Ada sesuatu yang jarang dibahas tentang ${topic}, dan itu justru yang paling menarik.`,
-        `Kalau kamu pikir ${topic} itu sederhana, video ini akan mengubah cara pandangmu.`
-      ];
-      return {
-        title,
-        hook: hooks[Math.floor(Math.random() * hooks.length)],
-        angle: `${type} angle yang fokus pada ${sub}`,
-        reason: 'Punya hook, rasa penasaran, dan cocok untuk retention.'
-      };
-    }
-
-    function renderIdeas(ideas) {
-      const box = document.getElementById('script-ideas');
-      box.innerHTML = '';
-      ideas.forEach((idea, i) => {
-        const selected = STATE.selectedIdea?.title === idea.title;
-        const card = document.createElement('button');
-        card.className = `text-left p-4 rounded-2xl border ${selected ? 'border-red-500 bg-red-500/10' : 'border-gray-200 dark:border-[#3a3a3a] bg-white/70 dark:bg-[#1a1a1a]'} hover:border-gray-400 dark:hover:border-gray-500`;
-        card.innerHTML = `
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <div class="font-bold">${idea.title}</div>
-              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">${idea.angle}</div>
-            </div>
-            <span class="text-[10px] px-2 py-1 rounded-full ${i === 0 ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'}">${i === 0 ? 'Best' : 'Alt'}</span>
-          </div>
-          <div class="text-sm mt-2 text-gray-600 dark:text-gray-300"><b>Hook:</b> ${idea.hook}</div>
-        `;
-        card.onclick = () => {
-          STATE.selectedIdea = idea;
-          STATE.topic = document.getElementById('script-topic').value.trim() || STATE.topic;
-          STATE.brief = document.getElementById('script-brief').value.trim() || STATE.brief;
-          updateBadges();
-          saveState();
-          renderIdeas(ideas);
-          showToast('Idea selected.', 'success');
-        };
-        box.appendChild(card);
-      });
-      if (window.lucide) lucide.createIcons();
-    }
-
-    function localResearchFacts(query, lang='id') {
-      const words = query.split(/\s+/).filter(Boolean);
-      const subject = query.trim() || 'topik ini';
-      const facts = [
-        `${subject} biasanya memiliki banyak sudut pandang, jadi gunakan data utama dan contoh nyata.`,
-        `Saat menulis tentang ${subject}, fokus pada konteks, dampak, dan miskonsepsi umum.`,
-        `Gunakan kata kunci turunan seperti ${words.slice(0,3).join(', ') || subject} untuk memperkuat relevansi.`,
-        `Tambahkan transisi yang jelas supaya audiens tetap mengikuti alur dari awal sampai akhir.`,
-      ];
-      return {
-        facts,
-        sources: [
-          { title: 'General internet search (fallback)', url: 'https://www.google.com/search?q=' + encodeURIComponent(subject) }
-        ],
-        hook: lang === 'id'
-          ? `Yang menarik dari ${subject} adalah ada detail yang sering dilewatkan.`
-          : `What makes ${subject} interesting is the detail people often miss.`,
-        primaryKeyword: subject,
-        secondaryKeyword: `${subject} guide`,
-        ctrScore: '8.2/10'
-      };
-    }
-
-    async function fetchResearch(query, lang='id') {
-      const safeQuery = (query || '').trim();
-      if (!safeQuery) return localResearchFacts('topik ini', lang);
-      try {
-        const res = await fetch('/api/research', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: safeQuery, lang })
-        });
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.json();
-        return data;
-      } catch (err) {
-        console.warn('Research fallback:', err);
-        return localResearchFacts(safeQuery, lang);
-      }
-    }
-
-    function scriptTemplate({ title, brief, category, subcategory, durationIdx, lang, research, style, emotion }) {
-      const d = DURATIONS[durationIdx] || DURATIONS[6];
-      const facts = (research?.facts || []).slice(0, 4);
-      const sourceBlock = (research?.sources || []).slice(0, 3).map((s, i) => `${i+1}. ${s.title} — ${s.url}`).join('\n');
-      const factBlock = facts.length ? facts.map((f, i) => `- Fakta ${i+1}: ${f}`).join('\n') : '- Data internet belum tersedia, gunakan data umum dan insight manual.';
-      const t = title || 'Untitled Script';
-      return `# ${t}
-
-**Language:** ${lang === 'id' ? 'Bahasa Indonesia' : 'English'}
-**Category:** ${category || '-'}${subcategory ? ` / ${subcategory}` : ''}
-**Brief:** ${brief || '-'}
-**Duration Target:** ${d.label} (${d.type})
-**Est. Word Count:** ~${d.words} words
-
----
-
-## HOOK
-${research?.hook || `Kamu mungkin belum sadar, tapi ${t} punya sisi menarik yang jarang dibahas.`}
-
-## DATA / FACTS
-${factBlock}
-
-## INTRO
-Pembahasan ini dibuka dengan gaya ${style || 'casual'} supaya audiens langsung paham konteks.
-
-## BODY
-### BAB 1
-Mulai dari konteks dasar dan definisi singkat. Tujuannya agar penonton dari level ${emotion || 'normal'} tetap mudah mengikuti.
-
-### BAB 2
-Masuk ke inti topik: jelaskan poin paling penting, dampak, atau kontroversinya. Selipkan contoh nyata dan transisi yang halus.
-
-### BAB 3
-Perkuat dengan insight tambahan, perbandingan, atau dampak jangka panjang. Jaga ritme agar retention tetap tinggi.
-
-## PAYOFF
-Kesimpulannya, ${t} bukan cuma soal permukaan. Ada detail yang menentukan cara kita memahaminya.
-
-## CTA
-Kalau kamu suka format seperti ini, like, subscribe, dan tulis topik berikutnya di komentar.
-
-## SOURCES
-${sourceBlock || '- Sumber fallback lokal / belum tersedia'}`;
-    }
-
-    async function onGenerateScript() {
-      const topic = document.getElementById('script-topic').value.trim();
-      const brief = document.getElementById('script-brief').value.trim();
-      const category = document.getElementById('script-category').value;
-      const subcategory = document.getElementById('script-subcategory').value;
-      const durationIdx = Number(document.getElementById('script-duration').value || 6);
-      const lang = document.getElementById('script-language').value;
-      const selectedStyle = document.getElementById('script-brief').value.trim() || 'storytelling';
-      const emotion = 'normal';
-
-      const title = topic || STATE.selectedIdea?.title || 'Script';
-      document.getElementById('script-skeleton').classList.remove('hidden');
-      document.getElementById('script-output').value = '';
-      document.getElementById('script-stat').textContent = 'generating...';
-      try {
-        const research = await fetchResearch([topic, brief, category, subcategory].filter(Boolean).join(' '), lang);
-        STATE.research = research;
-        const script = scriptTemplate({
-          title,
-          brief,
-          category,
-          subcategory,
-          durationIdx,
-          lang,
-          research,
-          style: selectedStyle,
-          emotion
-        });
-        document.getElementById('script-output').value = script;
-        document.getElementById('script-stat').textContent = `${script.trim().split(/\s+/).length} words`;
-        document.getElementById('script-research').innerHTML = `
-          <div class="rounded-2xl p-4 border dark:border-[#3a3a3a] border-gray-200 bg-white/60 dark:bg-[#1a1a1a]">
-            <div class="font-semibold mb-2">Hook</div>
-            <div class="text-sm">${research.hook}</div>
-          </div>
-          <div class="rounded-2xl p-4 border dark:border-[#3a3a3a] border-gray-200 bg-white/60 dark:bg-[#1a1a1a]">
-            <div class="font-semibold mb-2">Facts</div>
-            <ul class="list-disc pl-5 space-y-1">${(research.facts || []).slice(0,4).map(f => `<li>${f}</li>`).join('')}</ul>
-          </div>
-          <div class="rounded-2xl p-4 border dark:border-[#3a3a3a] border-gray-200 bg-white/60 dark:bg-[#1a1a1a]">
-            <div class="font-semibold mb-2">Sources</div>
-            <ul class="space-y-1">${(research.sources || []).slice(0,3).map(s => `<li><a class="text-red-500 hover:underline" target="_blank" href="${s.url}">${s.title}</a></li>`).join('')}</ul>
-          </div>
-        `;
-        STATE.topic = topic || STATE.topic;
-        STATE.brief = brief || STATE.brief;
-        STATE.category = category;
-        STATE.subcategory = subcategory;
-        STATE.script = script;
-        STATE.scriptMeta = { title, brief, category, subcategory, durationIdx, lang };
-        saveState(true);
-        showToast('Script generated.', 'success');
-      } catch (err) {
-        showToast('Script generation failed.', 'error');
-        console.error(err);
-      } finally {
-        document.getElementById('script-skeleton').classList.add('hidden');
-        renderDashboard();
-        updateBadges();
-      }
-    }
-
-    function makeThumbnailCanvas({ title, style, overlay, idx }) {
-      const canvas = document.createElement('canvas');
-      canvas.width = 1280; canvas.height = 720;
-      const ctx = canvas.getContext('2d');
-      const g = ctx.createLinearGradient(0,0,1280,720);
-      const palettes = [
-        ['#111827','#7f1d1d','#f97316'],
-        ['#0f172a','#581c87','#38bdf8'],
-        ['#1f2937','#064e3b','#facc15'],
-      ];
-      const p = palettes[idx % palettes.length];
-      g.addColorStop(0, p[0]); g.addColorStop(0.6, p[1]); g.addColorStop(1, p[2]);
-      ctx.fillStyle = g; ctx.fillRect(0,0,1280,720);
-      ctx.fillStyle = 'rgba(255,255,255,.1)';
-      for (let i=0; i<14; i++) { ctx.beginPath(); ctx.arc(Math.random()*1280, Math.random()*720, 50+Math.random()*90, 0, Math.PI*2); ctx.fill(); }
-      ctx.fillStyle = 'rgba(0,0,0,.32)'; ctx.fillRect(0,0,1280,720);
-      ctx.fillStyle = '#fff';
-      ctx.font = '800 80px Inter, sans-serif';
-      const words = overlay.split(' ');
-      ctx.fillText(words[0], 80, 180);
-      if (words[1]) ctx.fillText(words.slice(1).join(' '), 80, 270);
-      ctx.font = '700 48px Inter, sans-serif';
-      wrapText(ctx, title, 80, 410, 620, 56);
-      ctx.fillStyle = 'rgba(255,255,255,.18)';
-      ctx.fillRect(760, 90, 440, 540);
-      ctx.fillStyle = '#f59e0b';
-      ctx.fillRect(760, 90, 18, 540);
-      ctx.fillStyle = '#fff';
-      ctx.font = '700 32px Inter, sans-serif';
-      ctx.fillText('ToolHub ID', 800, 160);
-      ctx.font = '500 24px Inter, sans-serif';
-      wrapText(ctx, style, 800, 220, 360, 32);
-      ctx.fillStyle = '#e5e7eb';
-      ctx.font = '400 18px Inter, sans-serif';
-      ctx.fillText('1280 x 720 PNG', 800, 620);
-      return canvas.toDataURL('image/png');
-    }
-
-    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-      const words = String(text || '').split(/\s+/);
-      let line = '';
-      let yy = y;
-      for (let n=0; n<words.length; n++) {
-        const testLine = line + words[n] + ' ';
-        const metrics = ctx.measureText(testLine);
-        if (metrics.width > maxWidth && n > 0) {
-          ctx.fillText(line, x, yy);
-          line = words[n] + ' ';
-          yy += lineHeight;
-        } else {
-          line = testLine;
+    let appState = { category: '', topic: '', script: '' };
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white');
+        btn.classList.add('text-slate-400');
+        if(btn.getAttribute('data-target') === tabId) {
+          btn.classList.add('bg-indigo-600', 'text-white');
+          btn.classList.remove('text-slate-400');
         }
-      }
-      ctx.fillText(line, x, yy);
-    }
-
-    function renderThumbnailCards(items) {
-      const out = document.getElementById('thumb-results');
-      out.innerHTML = items.map((item, idx) => {
-        const png = makeThumbnailCanvas(item, idx);
-        return `
-          <div class="glass rounded-[1.75rem] overflow-hidden">
-            <div class="p-4 border-b dark:border-[#3a3a3a] border-gray-200 dark:bg-[#1a1a1a] bg-gray-100 flex items-center justify-between">
-              <div class="font-bold">Concept ${idx+1}</div>
-              <div class="text-xs px-2 py-1 rounded-full bg-purple-500/10 text-purple-400">${item.overlay}</div>
-            </div>
-            <div class="p-5 grid lg:grid-cols-2 gap-4">
-              <div>
-                <img class="w-full rounded-2xl border border-gray-200 dark:border-[#3a3a3a]" src="${png}" alt="thumbnail preview">
-                <div class="mt-3 flex flex-wrap gap-2">
-                  <button class="thumb-download px-3 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold" data-png="${png}" data-name="thumbnail-${idx+1}.png">Download PNG</button>
-                  <button class="thumb-copy px-3 py-2 rounded-xl border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#222] text-xs font-semibold" data-prompt="${item.prompt}">Copy Prompt</button>
-                </div>
-              </div>
-              <div class="space-y-3 text-sm">
-                <div><div class="text-xs text-gray-500 mb-1">AI Prompt</div><div class="rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-200 dark:bg-[#111] bg-gray-50 font-mono text-xs">${item.prompt}</div></div>
-                <div class="grid grid-cols-2 gap-3">
-                  <div><div class="text-xs text-gray-500">Camera</div><div class="font-semibold">${item.camera}</div></div>
-                  <div><div class="text-xs text-gray-500">Lighting</div><div class="font-semibold">${item.light}</div></div>
-                  <div><div class="text-xs text-gray-500">Lens</div><div class="font-semibold">${item.lens}</div></div>
-                  <div><div class="text-xs text-gray-500">Palette</div><div class="font-semibold">${item.palette}</div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-      out.querySelectorAll('.thumb-download').forEach(btn => btn.addEventListener('click', () => downloadFile(btn.dataset.name, btn.dataset.png.split(',')[1] ? atob(btn.dataset.png.split(',')[1]) : btn.dataset.png, 'image/png')));
-      out.querySelectorAll('.thumb-copy').forEach(btn => btn.addEventListener('click', () => copyText(btn.dataset.prompt, 'Prompt copied.')));
-      // Override download to use canvas dataURL -> blob
-      out.querySelectorAll('.thumb-download').forEach(btn => btn.onclick = () => {
-        const dataURL = btn.dataset.png;
-        fetch(dataURL).then(r => r.blob()).then(blob => {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url; a.download = btn.dataset.name;
-          document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-        });
       });
-    }
-
-    function generateThumbnailIdeas() {
-      const title = document.getElementById('thumb-title').value.trim() || STATE.selectedIdea?.title || STATE.topic || 'Topik Menarik';
-      const style = document.getElementById('thumb-style').value.trim() || 'Cinematic, bold text, high contrast';
-      STATE.thumbnails = [
-        {
-          overlay: 'WOW!',
-          prompt: `${title} dramatic YouTube thumbnail, shocked expression, bold contrast, cinematic lighting, ${style}`,
-          camera: 'Close-up',
-          light: 'Cinematic',
-          lens: '50mm',
-          palette: 'Red, black, white'
-        },
-        {
-          overlay: 'RAHASIA',
-          prompt: `${title} investigative thumbnail, split-screen, highlight object, high contrast, ${style}`,
-          camera: 'Medium shot',
-          light: 'Neon',
-          lens: '35mm',
-          palette: 'Yellow, black, cyan'
-        },
-        {
-          overlay: '3 FAKTA',
-          prompt: `${title} listicle thumbnail, big number text, dynamic layout, modern YouTube style, ${style}`,
-          camera: 'Wide',
-          light: 'Bright',
-          lens: '24mm',
-          palette: 'Blue, white, red'
-        }
-      ];
-      renderThumbnailCards(STATE.thumbnails);
-      saveState(true);
-      showToast('Thumbnail concepts generated.', 'success');
-    }
-
-    function generateVoiceFormat() {
-      const source = document.getElementById('voice-source').value;
-      const persona = document.getElementById('voice-persona').value.trim() || 'Pria muda, tegas, natural, engaging';
-      const emotion = document.getElementById('voice-emotion').value;
-      const speed = document.getElementById('voice-speed').value;
-      const text = source === 'script' ? (STATE.script || '') : document.getElementById('voice-input').value.trim();
-      if (!text) return showToast('Isi script dulu atau generate script.', 'error');
-
-      const stability = emotion === 'Serious' ? '68%' : emotion === 'Suspense' ? '42%' : emotion === 'Calm' ? '72%' : '55%';
-      const similarity = '78%';
-      const style = speed === 'Fast' ? '18%' : speed === 'Slow' ? '10%' : '14%';
-      const boost = 'On';
-      const ssml = text
-        .replace(/\n{2,}/g, '\n')
-        .replace(/([.!?])\s+/g, `$1 <break time="${speed === 'Fast' ? '250ms' : speed === 'Slow' ? '900ms' : '500ms'}"/> `);
-
-      STATE.voice = {
-        text: ssml,
-        persona, emotion, speed,
-        stability, similarity, style, boost
+      const titles = {
+        'dashboard': 'Dashboard Utama',
+        'category': 'Pilih Kategori Konten',
+        'ideation': 'Content Ideation',
+        'script': 'Script Generator',
+        'voiceover': 'Voiceover Generator',
+        'thumbnail': 'Thumbnail Ideas',
+        'seo': 'Title & SEO'
       };
-
-      document.getElementById('voice-input').value = ssml;
-      document.getElementById('voice-stability').textContent = stability;
-      document.getElementById('voice-similarity').textContent = similarity;
-      document.getElementById('voice-style').textContent = style;
-      document.getElementById('voice-boost').textContent = boost;
-      saveState(true);
-      showToast('Voice format generated.', 'success');
+      document.getElementById('page-title').innerText = titles[tabId] || 'ToolHub ID';
     }
-
-    function generateSEO() {
-      const topic = document.getElementById('seo-topic').value.trim() || STATE.topic || STATE.selectedIdea?.title || 'Topik';
-      const country = document.getElementById('seo-country').value;
-      const base = topic.toLowerCase();
-      const titles = [
-        `${topic} | Penjelasan Lengkap dan Mudah Dipahami`,
-        `Kenapa ${topic}? Ini Jawaban yang Jarang Dibahas`,
-        `Fakta Mengejutkan tentang ${topic} yang Wajib Kamu Tahu`,
-        `${topic}: Versi Singkat, Padat, dan Jelas`,
-        `Apa yang Sebenarnya Terjadi di Balik ${topic}?`
-      ];
-      const tags = [
-        base, `${base} indonesia`, `${base} terbaru`, `${topic}`, `youtube ${base}`.replace(/\s+/g,' ')
-      ].join(', ');
-      const hashtags = `#${base.replace(/\s+/g,'')} #youtube #viral`;
-      const description = `Di video ini kita bahas ${topic} secara singkat, jelas, dan mudah dipahami.\n\nPoint utama:\n- Penjelasan inti\n- Fakta penting\n- Kesimpulan\n\nKalau suka konten seperti ini, jangan lupa like, subscribe, dan komen topik selanjutnya.\n\n${hashtags}`;
-
-      const output = document.getElementById('seo-output');
-      output.innerHTML = `
-        <div class="glass rounded-[1.75rem] p-5">
-          <div class="grid md:grid-cols-3 gap-4">
-            <div class="rounded-2xl p-4 bg-gray-100 dark:bg-[#1a1a1a]">
-              <div class="text-[11px] uppercase text-gray-500">Primary Keyword</div>
-              <div class="font-bold mt-1 text-red-500">${topic}</div>
-            </div>
-            <div class="rounded-2xl p-4 bg-gray-100 dark:bg-[#1a1a1a]">
-              <div class="text-[11px] uppercase text-gray-500">Secondary Keyword</div>
-              <div class="font-semibold mt-1">${base} guide</div>
-            </div>
-            <div class="rounded-2xl p-4 bg-gray-100 dark:bg-[#1a1a1a]">
-              <div class="text-[11px] uppercase text-gray-500">Target Country</div>
-              <div class="font-semibold mt-1">${country}</div>
-            </div>
+    function selectCategory(catName) {
+      appState.category = catName;
+      document.getElementById('active-cat-name').innerText = catName;
+      document.getElementById('selected-category-alert').classList.remove('hidden');
+      localStorage.setItem('toolhub_state', JSON.stringify(appState));
+    }
+    function generateIdeas() {
+      const topic = document.getElementById('topic-input').value;
+      if(!topic) { alert('Silakan masukkan topik terlebih dahulu!'); return; }
+      appState.topic = topic;
+      localStorage.setItem('toolhub_state', JSON.stringify(appState));
+      const resultBox = document.getElementById('ideas-result');
+      resultBox.innerHTML = `
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-center justify-between">
+          <div>
+            <span class="text-xs bg-indigo-500/10 text-indigo-400 px-2 py-0.5 rounded font-semibold">Ide Terpilih</span>
+            <h4 class="font-bold text-white mt-1">Analisis Mendalam: ${topic}</h4>
+            <p class="text-xs text-slate-400 mt-1">Potensi penonton tinggi berdasarkan kategori ${appState.category || 'Umum'}.</p>
           </div>
-        </div>
-        <div class="glass rounded-[1.75rem] p-5">
-          <div class="flex items-center justify-between mb-3"><h3 class="font-bold">Title Variations</h3><button class="text-xs font-semibold text-red-500" id="seo-copy-titles">Copy titles</button></div>
-          <div id="seo-title-list" class="grid gap-2">${titles.map(t => `<button class="text-left p-3 rounded-2xl border dark:border-[#3a3a3a] border-gray-200 hover:bg-gray-50 dark:hover:bg-[#2a2a2a]">${t}</button>`).join('')}</div>
-        </div>
-        <div class="grid lg:grid-cols-2 gap-5">
-          <div class="glass rounded-[1.75rem] p-5"><div class="flex items-center justify-between mb-3"><h3 class="font-bold">Tags</h3><button id="seo-copy-tags" class="text-xs font-semibold text-red-500">Copy</button></div><textarea id="seo-tags-box" class="w-full h-28 rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#111]" readonly>${tags}</textarea></div>
-          <div class="glass rounded-[1.75rem] p-5"><div class="flex items-center justify-between mb-3"><h3 class="font-bold">Hashtags</h3><button id="seo-copy-hashtags" class="text-xs font-semibold text-red-500">Copy</button></div><div id="seo-hashtags-box" class="rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#111]">${hashtags}</div></div>
-        </div>
-        <div class="glass rounded-[1.75rem] p-5">
-          <div class="flex items-center justify-between mb-3"><h3 class="font-bold">Description</h3><button id="seo-copy-desc" class="text-xs font-semibold text-red-500">Copy</button></div>
-          <textarea id="seo-desc-box" class="w-full h-56 rounded-2xl p-3 border dark:border-[#3a3a3a] border-gray-300 bg-white dark:bg-[#111]" readonly>${description}</textarea>
+          <button onclick="switchTab('script')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-2 rounded-lg font-medium">Gunakan ke Script</button>
         </div>
       `;
-      STATE.seo = { topic, country, titles, tags, hashtags, description };
-      saveState(true);
-      document.getElementById('seo-copy-tags').onclick = () => copyText(tags, 'Tags copied.');
-      document.getElementById('seo-copy-hashtags').onclick = () => copyText(hashtags, 'Hashtags copied.');
-      document.getElementById('seo-copy-desc').onclick = () => copyText(description, 'Description copied.');
-      document.getElementById('seo-copy-titles').onclick = () => copyText(titles.join('\n'), 'Titles copied.');
-      output.querySelectorAll('#seo-title-list button').forEach(btn => btn.addEventListener('click', () => copyText(btn.textContent, 'Title copied.')));
-      showToast('SEO generated.', 'success');
     }
-
-    function renderChecklist() {
-      const list = document.getElementById('checklist');
-      const total = STATE.checklist.length || CHECKLIST_ITEMS.length;
-      const checked = STATE.checklist.filter(i => i.checked).length;
-      document.getElementById('check-progress').textContent = `${Math.round((checked/total)*100)}%`;
-      list.innerHTML = STATE.checklist.map((item, idx) => `
-        <label class="flex items-center gap-3 p-3 rounded-2xl hover:bg-gray-100 dark:hover:bg-[#2a2a2a] cursor-pointer">
-          <input type="checkbox" data-idx="${idx}" class="w-5 h-5 accent-red-500" ${item.checked ? 'checked' : ''}>
-          <span class="font-medium ${item.checked ? 'line-through opacity-50' : ''}">${item.label}</span>
-        </label>
-      `).join('');
-      list.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.addEventListener('change', (e) => {
-        const idx = Number(e.target.dataset.idx);
-        STATE.checklist[idx].checked = e.target.checked;
-        saveState(true);
-        renderChecklist();
-      }));
+    function generateScript() {
+      const style = document.getElementById('script-style').value;
+      const duration = document.getElementById('script-duration').value;
+      const topicText = appState.topic || 'Topik Kreator YouTube';
+      const sampleScript = `[INTRO - 0:00]\nHalo semuanya! Selamat datang kembali. Hari ini kita akan membahas tuntas tentang "${topicText}".\nGaya bahasa: ${style}. Target durasi: ${duration}.\n\n[BODY - 0:15]\nBanyak kreator mengabaikan detail kecil ini, padahal dampaknya sangat besar terhadap performa video di beranda penonton...\n\n[OUTRO - Akhir Video]\nBagaimana menurut kalian? Tulis pendapat kalian di kolom komentar, jangan lupa like dan subscribe!`;
+      appState.script = sampleScript;
+      document.getElementById('script-text-area').value = sampleScript;
+      document.getElementById('script-output').classList.remove('hidden');
+      document.getElementById('vo-preview-box').innerText = sampleScript;
     }
-
-    function setupListeners() {
-      const navButtons = document.querySelectorAll('.nav-item');
-      navButtons.forEach(btn => btn.addEventListener('click', () => showSection(btn.dataset.target)));
-      document.querySelectorAll('.dash-jump').forEach(btn => btn.addEventListener('click', () => showSection(btn.dataset.target)));
-
-      document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-        const sidebar = document.querySelector('aside');
-        sidebar.classList.toggle('hidden');
-        sidebar.classList.toggle('absolute');
-        sidebar.classList.toggle('z-20');
-        sidebar.classList.toggle('w-full');
-      });
-
-      document.getElementById('btn-theme').addEventListener('click', () => { STATE.theme = STATE.theme === 'dark' ? 'light' : 'dark'; updateTheme(); saveState(true); });
-      document.getElementById('lang-id').addEventListener('click', () => { STATE.language = 'id'; saveState(true); });
-      document.getElementById('lang-intl').addEventListener('click', () => { STATE.language = 'en'; saveState(true); });
-
-      document.getElementById('btn-close-notice').addEventListener('click', () => document.getElementById('notice').classList.add('hidden'));
-      document.getElementById('btn-save').addEventListener('click', () => saveState());
-
-      document.getElementById('btn-search').addEventListener('click', () => showSection('dashboard'));
-
-      // Script
-      const fillIdeas = () => {
-        const topic = document.getElementById('script-topic').value.trim() || STATE.topic || 'Topik';
-        const category = document.getElementById('script-category').value;
-        const subcategory = document.getElementById('script-subcategory').value;
-        const ideas = [
-          buildIdea(`Kenapa ${topic} Bisa Meledak?`, topic, subcategory || category, 'Investigative'),
-          buildIdea(`3 Fakta Tentang ${topic} yang Jarang Dibahas`, topic, subcategory || category, 'Listicle'),
-          buildIdea(`Apa yang Sebenarnya Terjadi di Balik ${topic}?`, topic, subcategory || category, 'Storytelling')
-        ];
-        renderIdeas(ideas);
-      };
-      document.getElementById('btn-script-ideas').addEventListener('click', fillIdeas);
-      document.getElementById('btn-script-research').addEventListener('click', async () => {
-        const query = [document.getElementById('script-topic').value.trim(), document.getElementById('script-brief').value.trim(), document.getElementById('script-category').value, document.getElementById('script-subcategory').value].filter(Boolean).join(' ');
-        const research = await fetchResearch(query, document.getElementById('script-language').value);
-        STATE.research = research;
-        document.getElementById('script-research').innerHTML = `
-          <div class="rounded-2xl p-4 border dark:border-[#3a3a3a] border-gray-200 bg-white/60 dark:bg-[#1a1a1a]">
-            <div class="font-semibold mb-2">Hook</div><div class="text-sm">${research.hook}</div>
-          </div>
-          <div class="rounded-2xl p-4 border dark:border-[#3a3a3a] border-gray-200 bg-white/60 dark:bg-[#1a1a1a]">
-            <div class="font-semibold mb-2">Facts</div><ul class="list-disc pl-5 space-y-1">${(research.facts||[]).slice(0,4).map(f => `<li>${f}</li>`).join('')}</ul>
-          </div>
-          <div class="rounded-2xl p-4 border dark:border-[#3a3a3a] border-gray-200 bg-white/60 dark:bg-[#1a1a1a]">
-            <div class="font-semibold mb-2">Sources</div><ul class="space-y-1">${(research.sources||[]).slice(0,3).map(s => `<li><a class="text-red-500 hover:underline" target="_blank" href="${s.url}">${s.title}</a></li>`).join('')}</ul>
-          </div>
-        `;
-        showToast('Research updated.', 'success');
-      });
-      document.getElementById('btn-script-generate').addEventListener('click', onGenerateScript);
-      document.getElementById('btn-script-copy').addEventListener('click', () => copyText(document.getElementById('script-output').value, 'Script copied.'));
-      document.getElementById('btn-script-txt').addEventListener('click', () => downloadFile('toolhub-script.txt', document.getElementById('script-output').value));
-      document.getElementById('script-output').addEventListener('input', () => { STATE.script = document.getElementById('script-output').value; saveState(true); document.getElementById('script-stat').textContent = `${STATE.script.trim().split(/\s+/).filter(Boolean).length} words`; });
-      document.getElementById('script-topic').addEventListener('input', () => { STATE.topic = document.getElementById('script-topic').value.trim(); saveState(true); });
-      document.getElementById('script-brief').addEventListener('input', () => { STATE.brief = document.getElementById('script-brief').value.trim(); saveState(true); });
-
-      // Thumbnail
-      document.getElementById('btn-thumb-generate').addEventListener('click', generateThumbnailIdeas);
-      document.getElementById('btn-thumb-copy-all').addEventListener('click', () => {
-        const text = (STATE.thumbnails || []).map((t, i) => `#${i+1} ${t.overlay}\n${t.prompt}`).join('\n\n');
-        copyText(text || 'No thumbnails yet.', 'All prompts copied.');
-      });
-      document.getElementById('thumb-title').addEventListener('input', () => { STATE.topic = document.getElementById('thumb-title').value.trim() || STATE.topic; saveState(true); });
-      document.getElementById('thumb-style').addEventListener('input', () => { /* no-op */ });
-
-      // Voice
-      document.getElementById('btn-voice-from-script').addEventListener('click', () => {
-        const script = document.getElementById('script-output').value || STATE.script || '';
-        document.getElementById('voice-input').value = script;
-        showToast('Pulled current script.', 'success');
-      });
-      document.getElementById('btn-voice-generate').addEventListener('click', () => {
-        generateVoiceFormat();
-        document.getElementById('voice-input').value = STATE.voice.text || document.getElementById('voice-input').value;
-      });
-      document.getElementById('btn-voice-copy').addEventListener('click', () => copyText(document.getElementById('voice-input').value, 'Voice text copied.'));
-      document.getElementById('btn-voice-txt').addEventListener('click', () => downloadFile('toolhub-voice.txt', document.getElementById('voice-input').value));
-      document.getElementById('voice-input').addEventListener('input', () => { STATE.voice.text = document.getElementById('voice-input').value; saveState(true); });
-
-      // SEO
-      document.getElementById('btn-seo-generate').addEventListener('click', generateSEO);
-      document.getElementById('btn-seo-copy').addEventListener('click', () => {
-        const box = document.getElementById('seo-output').innerText || document.getElementById('seo-output').textContent || '';
-        copyText(box, 'SEO copied.');
-      });
-      document.getElementById('btn-seo-txt').addEventListener('click', () => downloadFile('toolhub-seo.txt', document.getElementById('seo-output').innerText || ''));
-      document.getElementById('seo-topic').addEventListener('input', () => { STATE.topic = document.getElementById('seo-topic').value.trim() || STATE.topic; saveState(true); });
-
-      // Global shortcuts
-      window.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key.toLowerCase() === 's') { e.preventDefault(); saveState(); }
-      });
+    function toggleProjectManager() {
+      const modal = document.getElementById('project-modal');
+      modal.classList.toggle('hidden');
+      document.getElementById('pm-cat').innerText = appState.category || 'Belum dipilih';
+      document.getElementById('pm-topic').innerText = appState.topic || 'Belum ada';
     }
-
-    function hydrateFromState() {
-      document.getElementById('script-topic').value = STATE.topic || '';
-      document.getElementById('script-brief').value = STATE.brief || '';
-      document.getElementById('script-language').value = STATE.language || 'id';
-      document.getElementById('script-category').value = STATE.category || Object.keys(CATEGORIES)[0];
-      const subSel = document.getElementById('script-subcategory');
-      const fillSubs = (cat) => {
-        subSel.innerHTML = (CATEGORIES[cat] || []).map(s => `<option value="${s}">${s}</option>`).join('');
-      };
-      fillSubs(document.getElementById('script-category').value);
-      if (STATE.subcategory) subSel.value = STATE.subcategory;
-      document.getElementById('script-duration').value = String(STATE.scriptMeta.durationIdx ?? 6);
-      document.getElementById('script-output').value = STATE.script || '';
-      document.getElementById('voice-input').value = STATE.voice.text || '';
-      document.getElementById('voice-persona').value = STATE.voice.persona || 'Pria muda, tegas, natural, engaging';
-      document.getElementById('voice-emotion').value = STATE.voice.emotion || 'Normal';
-      document.getElementById('voice-speed').value = STATE.voice.speed || 'Normal';
-      document.getElementById('voice-stability').textContent = STATE.voice.stability || '—';
-      document.getElementById('voice-similarity').textContent = STATE.voice.similarity || '—';
-      document.getElementById('voice-style').textContent = STATE.voice.style || '—';
-      document.getElementById('voice-boost').textContent = STATE.voice.boost || '—';
-      document.getElementById('seo-topic').value = STATE.seo?.topic || STATE.topic || '';
-      document.getElementById('seo-country').value = STATE.seo?.country || 'Indonesia';
-      renderChecklist();
-      if (STATE.thumbnails?.length) renderThumbnailCards(STATE.thumbnails);
-      if (STATE.seo) generateSEO();
-      if (STATE.script) {
-        document.getElementById('script-stat').textContent = `${STATE.script.trim().split(/\s+/).filter(Boolean).length} words`;
-        document.getElementById('script-research').innerHTML = `
-          <div class="rounded-2xl p-4 border dark:border-[#3a3a3a] border-gray-200 bg-white/60 dark:bg-[#1a1a1a]">
-            <div class="font-semibold mb-2">Saved script loaded</div>
-            <div class="text-sm">Script dari sesi sebelumnya sudah dipulihkan. Klik Generate Script untuk memperbarui.</div>
-          </div>
-        `;
-      }
-      updateBadges();
-      renderDashboard();
-      if (window.lucide) lucide.createIcons();
-    }
-
-    function setInitialRoute() {
-      const hash = location.hash.replace('#','').trim();
-      showSection(hash || 'dashboard');
-    }
-
-    // init
-    applyThemeFromStorage();
-    populateSelectors();
-    setupListeners();
-    hydrateFromState();
-    setInitialRoute();
-    renderDashboard();
-
-    // restore notice if state exists
-    if (localStorage.getItem(STATE_KEY)) document.getElementById('notice').classList.remove('hidden');
-    if (window.lucide) lucide.createIcons();
   </script>
 </body>
 </html>
