@@ -156,7 +156,7 @@
             appState.category = val;
         }
 
-        // PENGHUBUNG AMAN KE CLOUDFLARE WORKER
+        // PENGHUBUNG FLEKSIBEL KE CLOUDFLARE WORKER
         async function callGemini(promptText) {
             const workerUrl = "https://blue-mouse-c220.fadliamar47.workers.dev";
             const response = await fetch(workerUrl, {
@@ -169,19 +169,26 @@
                 throw new Error('Gagal memproses permintaan AI melalui server.');
             }
 
-            const data = await response.json();
-            
+            const rawText = await response.text();
+            let data;
+            try {
+                data = JSON.parse(rawText);
+            } catch (e) {
+                return rawText; // Jika balasan langsung berupa teks biasa
+            }
+
+            // Periksa berbagai kemungkinan struktur kunci dari Worker
+            if (typeof data === 'string') return data;
             if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
                 return data.candidates[0].content.parts[0].text;
-            } else if (data.text) {
-                return data.text;
-            } else if (data.output) {
-                return data.output;
-            } else if (typeof data === 'string') {
-                return data;
-            } else {
-                throw new Error('Format balasan dari server tidak valid.');
             }
+            if (data.text) return data.text;
+            if (data.output) return data.output;
+            if (data.response) return data.response;
+            if (data.result) return data.result;
+
+            // Jika berbentuk objek JSON tetapi kuncinya tidak dikenal, ubah jadi string agar tetap tampil
+            return JSON.stringify(data, null, 2);
         }
 
         async function generateIdeasAI() {
